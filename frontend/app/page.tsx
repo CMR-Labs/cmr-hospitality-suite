@@ -30,10 +30,9 @@ const reasons = [
 export default function Home() {
   return (
     <main style={{ fontFamily: "'Inter', sans-serif", margin: 0, padding: 0 }}>
-
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, backgroundColor: "#1B2D5B", borderBottom: "1px solid #243d75" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 48px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "96px" }}>
-          <img src="/cmr-hospitality-logo.jpeg" alt="CMR Hospitality Suite" style={{ height: "95px", width: "auto" }} />
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 48px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "72px" }}>
+          <img src="/cmr-hospitality-logo.png" alt="CMR Hospitality Suite" style={{ height: "44px", width: "auto" }} />
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <Link href="/login" style={{ color: "#94a3b8", fontSize: "14px", textDecoration: "none", padding: "8px 16px" }}>Sign In</Link>
             <Link href="/register" style={{ backgroundColor: "#B8952A", color: "white", padding: "10px 24px", fontSize: "14px", fontWeight: 600, textDecoration: "none" }}>Get Started</Link>
@@ -41,8 +40,12 @@ export default function Home() {
         </div>
       </nav>
 
-      <section style={{ backgroundColor: "#1B2D5B", paddingTop: "160px", paddingBottom: "100px", paddingLeft: "48px", paddingRight: "48px" }}>
+      <section style={{ backgroundColor: "#1B2D5B", paddingTop: "140px", paddingBottom: "100px", paddingLeft: "48px", paddingRight: "48px" }}>
         <div style={{ maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "10px", backgroundColor: "#243d75", padding: "8px 16px", marginBottom: "32px" }}>
+            <img src="/cmr-group-logo.jpeg" alt="CMR Group" style={{ height: "20px", width: "auto" }} />
+            <span style={{ color: "#94a3b8", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase" }}>A Product of CMR Group</span>
+          </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "56px", fontWeight: 700, color: "white", lineHeight: 1.15, margin: "0 0 24px" }}>
             Run Your Hotel on<br /><span style={{ color: "#B8952A" }}>Intelligent Digital Infrastructure</span>
           </h1>
@@ -144,16 +147,16 @@ export default function Home() {
         </div>
       </section>
 
-      <footer style={{ backgroundColor: "#0F1E3D", borderTop: "1px solid #243d75", padding: "32px 48px" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <footer style={{ backgroundColor: "#0F1E3D", borderTop: "1px solid #243d75", padding: "40px 48px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+          <img src="/cmr-hospitality-logo.png" alt="CMR Hospitality Suite" style={{ height: "36px", width: "auto" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <img src="/cmr-group-logo.jpeg" alt="CMR Group" style={{ height: "16px", width: "auto" }} />
+            <span style={{ color: "#4B5563", fontSize: "12px" }}>A product of CMR Group</span>
+          </div>
           <p style={{ color: "#4B5563", fontSize: "12px", margin: 0 }}>© 2021 CMR Group · All rights reserved</p>
-          <a href="https://personal-website-tau-ten-68.vercel.app/" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
-            <img src="/cmr-group-logo.jpeg" alt="CMR Group" style={{ height: "36px", width: "auto" }} />
-            <span style={{ color: "#94a3b8", fontSize: "12px" }}>A product of CMR Group</span>
-          </a>
         </div>
       </footer>
-
     </main>
   );
 }
