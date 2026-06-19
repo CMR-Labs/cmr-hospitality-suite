@@ -18,6 +18,17 @@ type Guest = {
   total_spend: number;
 };
 
+type GuestForm = {
+  full_name: string;
+  email: string;
+  phone: string;
+  nationality: string;
+  id_type: string;
+  vip: boolean;
+  preferred_room_type: string;
+  notes: string;
+};
+
 const navItems = [
   "Dashboard", "Reservations", "Guests", "Rooms", "Housekeeping",
   "Event Halls", "Payments", "Analytics", "CRM", "AI Concierge",
@@ -25,6 +36,16 @@ const navItems = [
 ];
 
 const filters = ["All", "VIP"];
+
+const textFields = [
+  { label: "Full Name *", key: "full_name", placeholder: "Guest full name" },
+  { label: "Email", key: "email", placeholder: "guest@email.com" },
+  { label: "Phone", key: "phone", placeholder: "+234 000 000 0000" },
+  { label: "Nationality", key: "nationality", placeholder: "e.g. Nigerian" },
+  { label: "ID Type", key: "id_type", placeholder: "e.g. Passport" },
+  { label: "Preferred Room Type", key: "preferred_room_type", placeholder: "e.g. Suite" },
+  { label: "Notes", key: "notes", placeholder: "Optional notes" },
+];
 
 export default function Guests() {
   const router = useRouter();
@@ -35,7 +56,16 @@ export default function Guests() {
   const [showAdd, setShowAdd] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [form, setForm] = useState({ full_name: "", email: "", phone: "", nationality: "", id_type: "", vip: false, preferred_room_type: "", notes: "" });
+  const [form, setForm] = useState<GuestForm>({
+    full_name: "",
+    email: "",
+    phone: "",
+    nationality: "",
+    id_type: "",
+    vip: false,
+    preferred_room_type: "",
+    notes: "",
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -70,9 +100,16 @@ export default function Guests() {
     }
   };
 
+  const handleTextChange = (key: keyof GuestForm, value: string) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
+
   const filtered = guests.filter((g) => {
     const matchFilter = activeFilter === "All" || (activeFilter === "VIP" && g.vip);
-    const matchSearch = g.full_name.toLowerCase().includes(search.toLowerCase()) || g.email?.toLowerCase().includes(search.toLowerCase()) || g.phone?.includes(search);
+    const matchSearch =
+      g.full_name.toLowerCase().includes(search.toLowerCase()) ||
+      g.email?.toLowerCase().includes(search.toLowerCase()) ||
+      g.phone?.includes(search);
     return matchFilter && matchSearch;
   });
 
@@ -121,22 +158,24 @@ export default function Guests() {
                 <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "20px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 24px" }}>Add New Guest</h2>
                 {error && <p style={{ color: "#dc2626", fontSize: "13px", marginBottom: "16px" }}>{error}</p>}
                 <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-                  {[
-                    { label: "Full Name *", key: "full_name", placeholder: "Guest full name" },
-                    { label: "Email", key: "email", placeholder: "guest@email.com" },
-                    { label: "Phone", key: "phone", placeholder: "+234 000 000 0000" },
-                    { label: "Nationality", key: "nationality", placeholder: "e.g. Nigerian" },
-                    { label: "ID Type", key: "id_type", placeholder: "e.g. Passport" },
-                    { label: "Preferred Room Type", key: "preferred_room_type", placeholder: "e.g. Suite" },
-                    { label: "Notes", key: "notes", placeholder: "Optional notes" },
-                  ].map((f) => (
+                  {textFields.map((f) => (
                     <div key={f.key}>
                       <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "#1B2D5B", marginBottom: "6px" }}>{f.label}</label>
-                      <input value={(form as Record<string, string>)[f.key]} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })} placeholder={f.placeholder} style={{ width: "100%", padding: "10px 14px", border: "1px solid #E5E7EB", fontSize: "13px", outline: "none", boxSizing: "border-box" }} />
+                      <input
+                        value={form[f.key as keyof GuestForm] as string}
+                        onChange={(e) => handleTextChange(f.key as keyof GuestForm, e.target.value)}
+                        placeholder={f.placeholder}
+                        style={{ width: "100%", padding: "10px 14px", border: "1px solid #E5E7EB", fontSize: "13px", outline: "none", boxSizing: "border-box" }}
+                      />
                     </div>
                   ))}
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <input type="checkbox" checked={form.vip} onChange={(e) => setForm({ ...form, vip: e.target.checked })} id="vip" />
+                    <input
+                      type="checkbox"
+                      checked={form.vip}
+                      onChange={(e) => setForm((prev) => ({ ...prev, vip: e.target.checked }))}
+                      id="vip"
+                    />
                     <label htmlFor="vip" style={{ fontSize: "13px", color: "#1B2D5B", cursor: "pointer" }}>VIP Guest</label>
                   </div>
                   <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
