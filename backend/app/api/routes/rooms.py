@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.core.database import get_db
+from app.core.security import get_current_hotel_id
 from app.models.room import Room, RoomType
 from app.schemas.room import RoomCreate, RoomUpdate, RoomResponse, RoomTypeCreate, RoomTypeResponse
 from typing import List
@@ -10,12 +11,19 @@ from uuid import UUID
 router = APIRouter(prefix="/rooms", tags=["Rooms"])
 
 @router.get("/", response_model=List[RoomResponse])
-async def get_rooms(hotel_id: UUID, db: AsyncSession = Depends(get_db)):
+async def get_rooms(
+    db: AsyncSession = Depends(get_db),
+    hotel_id: UUID = Depends(get_current_hotel_id)
+):
     result = await db.execute(select(Room).where(Room.hotel_id == hotel_id))
     return result.scalars().all()
 
 @router.post("/", response_model=RoomResponse)
-async def create_room(hotel_id: UUID, data: RoomCreate, db: AsyncSession = Depends(get_db)):
+async def create_room(
+    data: RoomCreate,
+    db: AsyncSession = Depends(get_db),
+    hotel_id: UUID = Depends(get_current_hotel_id)
+):
     room = Room(hotel_id=hotel_id, **data.model_dump())
     db.add(room)
     await db.commit()
@@ -23,16 +31,25 @@ async def create_room(hotel_id: UUID, data: RoomCreate, db: AsyncSession = Depen
     return room
 
 @router.get("/{room_id}", response_model=RoomResponse)
-async def get_room(room_id: UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Room).where(Room.id == room_id))
+async def get_room(
+    room_id: UUID,
+    db: AsyncSession = Depends(get_db),
+    hotel_id: UUID = Depends(get_current_hotel_id)
+):
+    result = await db.execute(select(Room).where(Room.id == room_id, Room.hotel_id == hotel_id))
     room = result.scalar_one_or_none()
     if not room:
         raise HTTPException(status_code=404, detail="Room not found")
     return room
 
 @router.patch("/{room_id}", response_model=RoomResponse)
-async def update_room(room_id: UUID, data: RoomUpdate, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Room).where(Room.id == room_id))
+async def update_room(
+    room_id: UUID,
+    data: RoomUpdate,
+    db: AsyncSession = Depends(get_db),
+    hotel_id: UUID = Depends(get_current_hotel_id)
+):
+    result = await db.execute(select(Room).where(Room.id == room_id, Room.hotel_id == hotel_id))
     room = result.scalar_one_or_none()
     if not room:
         raise HTTPException(status_code=404, detail="Room not found")
@@ -43,8 +60,12 @@ async def update_room(room_id: UUID, data: RoomUpdate, db: AsyncSession = Depend
     return room
 
 @router.delete("/{room_id}")
-async def delete_room(room_id: UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Room).where(Room.id == room_id))
+async def delete_room(
+    room_id: UUID,
+    db: AsyncSession = Depends(get_db),
+    hotel_id: UUID = Depends(get_current_hotel_id)
+):
+    result = await db.execute(select(Room).where(Room.id == room_id, Room.hotel_id == hotel_id))
     room = result.scalar_one_or_none()
     if not room:
         raise HTTPException(status_code=404, detail="Room not found")
@@ -53,14 +74,21 @@ async def delete_room(room_id: UUID, db: AsyncSession = Depends(get_db)):
     return {"message": "Room deleted"}
 
 @router.post("/types/", response_model=RoomTypeResponse)
-async def create_room_type(hotel_id: UUID, data: RoomTypeCreate, db: AsyncSession = Depends(get_db)):
+async def create_room_type(
+    data: RoomTypeCreate,
+    db: AsyncSession = Depends(get_db),
+    hotel_id: UUID = Depends(get_current_hotel_id)
+):
     room_type = RoomType(hotel_id=hotel_id, **data.model_dump())
     db.add(room_type)
     await db.commit()
     await db.refresh(room_type)
     return room_type
 
-@router.get("/types/", response_model=List[RoomTypeResponse])
-async def get_room_types(hotel_id: UUID, db: AsyncSession = Depends(get_db)):
+@router.get("/types/list", response_model=List[RoomTypeResponse])
+async def get_room_types(
+    db: AsyncSession = Depends(get_db),
+    hotel_id: UUID = Depends(get_current_hotel_id)
+):
     result = await db.execute(select(RoomType).where(RoomType.hotel_id == hotel_id))
     return result.scalars().all()
