@@ -1,10 +1,51 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
 
 export default function Register() {
+  const router = useRouter();
   const [form, setForm] = useState({ hotelName: "", fullName: "", email: "", phone: "", password: "", confirmPassword: "" });
-  const handle = (e: React.ChangeEvent<HTMLInputElement>) => { setForm({ ...form, [e.target.name]: e.target.value }); };
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async () => {
+    if (!form.hotelName || !form.fullName || !form.email || !form.password) {
+      setError("Please fill in all required fields");
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    if (form.password.length < 8) {
+      setError("Password must be at least 8 characters");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      const data = await api.post("/api/v1/auth/register", {
+        hotel_name: form.hotelName,
+        full_name: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        password: form.password,
+      });
+      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main style={{ fontFamily: "'Inter', sans-serif", minHeight: "100vh", backgroundColor: "#F9F7F4", display: "flex", flexDirection: "column" }}>
@@ -18,6 +59,11 @@ export default function Register() {
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "28px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 8px" }}>Create your account</h1>
             <p style={{ color: "#6B7280", fontSize: "14px", margin: 0 }}>Get started with CMR Hospitality Suite — free to try</p>
           </div>
+          {error && (
+            <div style={{ backgroundColor: "#FEF2F2", border: "1px solid #FCA5A5", padding: "12px 16px", marginBottom: "20px" }}>
+              <p style={{ color: "#dc2626", fontSize: "13px", margin: 0 }}>{error}</p>
+            </div>
+          )}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div>
               <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "#1B2D5B", marginBottom: "6px" }}>Hotel / Business Name</label>
@@ -47,7 +93,9 @@ export default function Register() {
                 <input type="password" name="confirmPassword" value={form.confirmPassword} onChange={handle} placeholder="••••••••" style={{ width: "100%", padding: "12px 16px", border: "1px solid #e5e0d8", fontSize: "14px", color: "#1B2D5B", outline: "none", boxSizing: "border-box", backgroundColor: "#FAFAF9" }} />
               </div>
             </div>
-            <button style={{ width: "100%", backgroundColor: "#B8952A", color: "white", padding: "14px", fontSize: "14px", fontWeight: 600, border: "none", cursor: "pointer", marginTop: "8px" }}>Create Account</button>
+            <button onClick={handleRegister} disabled={loading} style={{ width: "100%", backgroundColor: loading ? "#6B7280" : "#B8952A", color: "white", padding: "14px", fontSize: "14px", fontWeight: 600, border: "none", cursor: loading ? "not-allowed" : "pointer", marginTop: "8px" }}>
+              {loading ? "Creating account..." : "Create Account"}
+            </button>
             <p style={{ color: "#6B7280", fontSize: "12px", textAlign: "center", margin: 0, lineHeight: 1.6 }}>
               By creating an account you agree to our <Link href="/terms" style={{ color: "#B8952A", textDecoration: "none" }}>Terms of Service</Link> and <Link href="/privacy" style={{ color: "#B8952A", textDecoration: "none" }}>Privacy Policy</Link>.
             </p>

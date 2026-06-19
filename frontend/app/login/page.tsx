@@ -1,10 +1,34 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
 
 export default function Login() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      setError("Please enter email and password");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      const data = await api.post("/api/v1/auth/login", { email, password });
+      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main style={{ fontFamily: "'Inter', sans-serif", minHeight: "100vh", backgroundColor: "#F9F7F4", display: "flex", flexDirection: "column" }}>
@@ -18,6 +42,11 @@ export default function Login() {
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "28px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 8px" }}>Welcome back</h1>
             <p style={{ color: "#6B7280", fontSize: "14px", margin: 0 }}>Sign in to your CMR Hospitality Suite account</p>
           </div>
+          {error && (
+            <div style={{ backgroundColor: "#FEF2F2", border: "1px solid #FCA5A5", padding: "12px 16px", marginBottom: "20px" }}>
+              <p style={{ color: "#dc2626", fontSize: "13px", margin: 0 }}>{error}</p>
+            </div>
+          )}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div>
               <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "#1B2D5B", marginBottom: "6px" }}>Email address</label>
@@ -28,9 +57,11 @@ export default function Login() {
                 <label style={{ fontSize: "13px", fontWeight: 500, color: "#1B2D5B" }}>Password</label>
                 <Link href="/forgot-password" style={{ fontSize: "12px", color: "#B8952A", textDecoration: "none" }}>Forgot password?</Link>
               </div>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" style={{ width: "100%", padding: "12px 16px", border: "1px solid #e5e0d8", fontSize: "14px", color: "#1B2D5B", outline: "none", boxSizing: "border-box", backgroundColor: "#FAFAF9" }} />
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleLogin()} placeholder="••••••••" style={{ width: "100%", padding: "12px 16px", border: "1px solid #e5e0d8", fontSize: "14px", color: "#1B2D5B", outline: "none", boxSizing: "border-box", backgroundColor: "#FAFAF9" }} />
             </div>
-            <button style={{ width: "100%", backgroundColor: "#1B2D5B", color: "white", padding: "14px", fontSize: "14px", fontWeight: 600, border: "none", cursor: "pointer", marginTop: "8px" }}>Sign In</button>
+            <button onClick={handleLogin} disabled={loading} style={{ width: "100%", backgroundColor: loading ? "#6B7280" : "#1B2D5B", color: "white", padding: "14px", fontSize: "14px", fontWeight: 600, border: "none", cursor: loading ? "not-allowed" : "pointer", marginTop: "8px" }}>
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
             <div style={{ borderTop: "1px solid #e5e0d8", paddingTop: "20px", textAlign: "center" }}>
               <p style={{ color: "#6B7280", fontSize: "13px", margin: 0 }}>Don't have an account? <Link href="/register" style={{ color: "#B8952A", textDecoration: "none", fontWeight: 600 }}>Create one free</Link></p>
             </div>
