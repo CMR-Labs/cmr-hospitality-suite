@@ -1,17 +1,22 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
 
-const payments = [
-  { id: "PAY-001", guest: "Adebayo Okonkwo", reservation: "RES-001", room: "Suite 101", amount: 180000, method: "Bank Transfer", status: "Successful", date: "Jun 16, 2025", time: "09:14 AM", type: "Reservation" },
-  { id: "PAY-002", guest: "Amina Bello", reservation: "RES-002", room: "Deluxe 204", amount: 70000, method: "Card", status: "Successful", date: "Jun 16, 2025", time: "10:32 AM", type: "Reservation" },
-  { id: "PAY-003", guest: "Emeka Nwosu", reservation: "RES-003", room: "Standard 312", amount: 60000, method: "Paystack", status: "Pending", date: "Jun 16, 2025", time: "11:05 AM", type: "Reservation" },
-  { id: "PAY-004", guest: "Ngozi Adeyemi", reservation: "RES-004", room: "Suite 105", amount: 160000, method: "Bank Transfer", status: "Successful", date: "Jun 16, 2025", time: "11:48 AM", type: "Partial Payment" },
-  { id: "PAY-005", guest: "Tunde Bakare", reservation: "RES-005", room: "Deluxe 208", amount: 35000, method: "Cash", status: "Successful", date: "Jun 15, 2025", time: "03:22 PM", type: "Reservation" },
-  { id: "PAY-006", guest: "Chioma Obi", reservation: "RES-006", room: "Suite 304", amount: 425000, method: "Flutterwave", status: "Pending", date: "Jun 16, 2025", time: "02:10 PM", type: "Reservation" },
-  { id: "PAY-007", guest: "Folake Adetoye", reservation: "RES-008", room: "Deluxe 103", amount: 108000, method: "Card", status: "Refunded", date: "Jun 16, 2025", time: "04:55 PM", type: "Refund" },
-  { id: "PAY-008", guest: "Bashir Musa", reservation: "RES-007", room: "Standard 201", amount: 40000, method: "Cash", status: "Successful", date: "Jun 14, 2025", time: "01:30 PM", type: "Reservation" },
-];
+type Payment = {
+  id: string;
+  reservation_id: string;
+  guest_id: string;
+  amount: number;
+  method: string;
+  status: string;
+  reference: string;
+  notes: string;
+};
+
+type Guest = { id: string; full_name: string };
+type Reservation = { id: string; reservation_number: string };
 
 const statusColor: Record<string, string> = {
   "Successful": "#15803d", "Pending": "#B8952A", "Refunded": "#6B7280", "Failed": "#dc2626",
@@ -19,11 +24,9 @@ const statusColor: Record<string, string> = {
 const statusBg: Record<string, string> = {
   "Successful": "#F0FDF4", "Pending": "#FFFBEB", "Refunded": "#F3F4F6", "Failed": "#FEF2F2",
 };
-const methodColor: Record<string, string> = {
-  "Bank Transfer": "#1B2D5B", "Card": "#1B2D5B", "Paystack": "#1B2D5B", "Flutterwave": "#1B2D5B", "Cash": "#6B7280",
-};
 
-const filters = ["All", "Successful", "Pending", "Refunded", "Failed"];
+const filters = ["All", "Successful", "Pending", "Refunded"];
+const methods = ["Cash", "Bank Transfer", "Card", "Paystack", "Flutterwave"];
 
 const navItems = [
   "Dashboard", "Reservations", "Guests", "Rooms", "Housekeeping",
@@ -32,28 +35,97 @@ const navItems = [
 ];
 
 export default function Payments() {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const router = useRouter();
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [guests, setGuests] = useState<Guest[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [showAdd, setShowAdd] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({ guest_id: "", reservation_id: "", amount: "", method: "Cash", reference: "", notes: "" });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) { router.push("/login"); return; }
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const [payData, guestData, resData] = await Promise.all([
+        api.get("/api/v1/payments/"),
+        api.get("/api/v1/guests/"),
+        api.get("/api/v1/reservations/"),
+      ]);
+      setPayments(payData);
+      setGuests(guestData);
+      setReservations(resData);
+    } catch {
+      router.push("/login");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAdd = async () => {
+    if (!form.amount || !form.method) { setError("Amount and method are required"); return; }
+    setSaving(true);
+    setError("");
+    try {
+      await api.post("/api/v1/payments/", {
+        guest_id: form.guest_id || null,
+        reservation_id: form.reservation_id || null,
+        amount: parseInt(form.amount),
+        method: form.method,
+        reference: form.reference,
+        notes: form.notes,
+      });
+      setShowAdd(false);
+      setForm({ guest_id: "", reservation_id: "", amount: "", method: "Cash", reference: "", notes: "" });
+      fetchData();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to record payment");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleConfirm = async (id: string) => {
+    try {
+      await api.patch(`/api/v1/payments/${id}/confirm`, {});
+      fetchData();
+    } catch { }
+  };
+
+  const handleRefund = async (id: string) => {
+    try {
+      await api.patch(`/api/v1/payments/${id}/refund`, {});
+      fetchData();
+    } catch { }
+  };
+
+  const getGuest = (id: string) => guests.find(g => g.id === id);
+  const getReservation = (id: string) => reservations.find(r => r.id === id);
 
   const filtered = payments.filter((p) => {
     const matchFilter = activeFilter === "All" || p.status === activeFilter;
-    const matchSearch =
-      p.guest.toLowerCase().includes(search.toLowerCase()) ||
-      p.id.toLowerCase().includes(search.toLowerCase()) ||
-      p.reservation.toLowerCase().includes(search.toLowerCase());
+    const guest = getGuest(p.guest_id);
+    const matchSearch = guest?.full_name.toLowerCase().includes(search.toLowerCase()) || p.reference?.toLowerCase().includes(search.toLowerCase());
     return matchFilter && matchSearch;
   });
 
   const summary = {
-    total: payments.reduce((sum, p) => sum + (p.status === "Successful" ? p.amount : 0), 0),
+    total: payments.filter(p => p.status === "Successful").reduce((sum, p) => sum + p.amount, 0),
     pending: payments.filter(p => p.status === "Pending").reduce((sum, p) => sum + p.amount, 0),
-    refunded: payments.filter(p => p.status === "Refunded").reduce((sum, p) => sum + p.amount, 0),
     count: payments.filter(p => p.status === "Successful").length,
+    refunded: payments.filter(p => p.status === "Refunded").reduce((sum, p) => sum + p.amount, 0),
   };
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", fontFamily: "'Inter', sans-serif", backgroundColor: "#F4F5F7" }}>
-
       <aside style={{ width: "220px", backgroundColor: "#1B2D5B", display: "flex", flexDirection: "column", position: "fixed", top: 0, left: 0, bottom: 0, zIndex: 20 }}>
         <div style={{ padding: "20px 16px", borderBottom: "1px solid #243d75" }}>
           <img src="/cmr-hospitality-logo.jpeg" alt="CMR Hospitality Suite" style={{ height: "44px", width: "auto" }} />
@@ -66,39 +138,81 @@ export default function Payments() {
           ))}
         </nav>
         <div style={{ padding: "16px", borderTop: "1px solid #243d75" }}>
-          <p style={{ color: "#94a3b8", fontSize: "11px", margin: "0 0 2px" }}>Parkview Hotel Abuja</p>
-          <p style={{ color: "#6B7280", fontSize: "11px", margin: "0 0 8px" }}>Admin</p>
-          <Link href="/login" style={{ color: "#B8952A", fontSize: "12px", textDecoration: "none" }}>Sign out</Link>
+          <button onClick={() => { localStorage.removeItem("token"); localStorage.removeItem("user"); router.push("/login"); }} style={{ color: "#B8952A", fontSize: "12px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Sign out</button>
         </div>
       </aside>
 
       <main style={{ marginLeft: "220px", flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-
         <header style={{ backgroundColor: "white", borderBottom: "1px solid #E5E7EB", padding: "0 28px", height: "60px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 10 }}>
           <div>
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", fontWeight: 700, color: "#1B2D5B", margin: 0 }}>Payments</h1>
-            <p style={{ color: "#9CA3AF", fontSize: "11px", margin: 0 }}>Parkview Hotel Abuja · Payment Management</p>
+            <p style={{ color: "#9CA3AF", fontSize: "11px", margin: 0 }}>Payment management</p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search guest, ID, reservation..." style={{ padding: "8px 14px", border: "1px solid #E5E7EB", fontSize: "13px", color: "#1B2D5B", outline: "none", width: "220px", backgroundColor: "#F9FAFB" }} />
-            <Link href="/dashboard/payments/new" style={{ backgroundColor: "#B8952A", color: "white", padding: "8px 18px", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>+ Record Payment</Link>
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search payments..." style={{ padding: "8px 14px", border: "1px solid #E5E7EB", fontSize: "13px", color: "#1B2D5B", outline: "none", width: "220px", backgroundColor: "#F9FAFB" }} />
+            <button onClick={() => setShowAdd(true)} style={{ backgroundColor: "#B8952A", color: "white", padding: "8px 18px", fontSize: "13px", fontWeight: 600, border: "none", cursor: "pointer" }}>+ Record Payment</button>
           </div>
         </header>
 
         <div style={{ padding: "28px", flex: 1 }}>
 
+          {/* Add Payment Modal */}
+          {showAdd && (
+            <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ backgroundColor: "white", padding: "32px", width: "480px", maxWidth: "90vw" }}>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "20px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 24px" }}>Record Payment</h2>
+                {error && <p style={{ color: "#dc2626", fontSize: "13px", marginBottom: "16px" }}>{error}</p>}
+                <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                  <div>
+                    <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "#1B2D5B", marginBottom: "6px" }}>Guest</label>
+                    <select value={form.guest_id} onChange={(e) => setForm({ ...form, guest_id: e.target.value })} style={{ width: "100%", padding: "10px 14px", border: "1px solid #E5E7EB", fontSize: "13px", outline: "none", boxSizing: "border-box", backgroundColor: "white" }}>
+                      <option value="">Select guest</option>
+                      {guests.map(g => <option key={g.id} value={g.id}>{g.full_name}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "#1B2D5B", marginBottom: "6px" }}>Reservation</label>
+                    <select value={form.reservation_id} onChange={(e) => setForm({ ...form, reservation_id: e.target.value })} style={{ width: "100%", padding: "10px 14px", border: "1px solid #E5E7EB", fontSize: "13px", outline: "none", boxSizing: "border-box", backgroundColor: "white" }}>
+                      <option value="">Select reservation</option>
+                      {reservations.map(r => <option key={r.id} value={r.id}>{r.reservation_number}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "#1B2D5B", marginBottom: "6px" }}>Amount (₦) *</label>
+                    <input type="number" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} placeholder="e.g. 180000" style={{ width: "100%", padding: "10px 14px", border: "1px solid #E5E7EB", fontSize: "13px", outline: "none", boxSizing: "border-box" }} />
+                  </div>
+                  <div>
+                    <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "#1B2D5B", marginBottom: "6px" }}>Payment Method *</label>
+                    <select value={form.method} onChange={(e) => setForm({ ...form, method: e.target.value })} style={{ width: "100%", padding: "10px 14px", border: "1px solid #E5E7EB", fontSize: "13px", outline: "none", boxSizing: "border-box", backgroundColor: "white" }}>
+                      {methods.map(m => <option key={m} value={m}>{m}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "#1B2D5B", marginBottom: "6px" }}>Reference</label>
+                    <input value={form.reference} onChange={(e) => setForm({ ...form, reference: e.target.value })} placeholder="Transaction reference" style={{ width: "100%", padding: "10px 14px", border: "1px solid #E5E7EB", fontSize: "13px", outline: "none", boxSizing: "border-box" }} />
+                  </div>
+                  <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+                    <button onClick={handleAdd} disabled={saving} style={{ flex: 1, backgroundColor: saving ? "#6B7280" : "#1B2D5B", color: "white", padding: "12px", fontSize: "13px", fontWeight: 600, border: "none", cursor: saving ? "not-allowed" : "pointer" }}>
+                      {saving ? "Saving..." : "Record Payment"}
+                    </button>
+                    <button onClick={() => { setShowAdd(false); setError(""); }} style={{ flex: 1, backgroundColor: "white", color: "#6B7280", padding: "12px", fontSize: "13px", border: "1px solid #E5E7EB", cursor: "pointer" }}>Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Summary */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "24px" }}>
             {[
-              { label: "Total Revenue", value: `₦${(summary.total / 1000000).toFixed(2)}M`, sub: "Successful payments", color: "#15803d" },
-              { label: "Pending", value: `₦${(summary.pending / 1000).toFixed(0)}K`, sub: `${payments.filter(p => p.status === "Pending").length} transactions`, color: "#B8952A" },
-              { label: "Refunded", value: `₦${(summary.refunded / 1000).toFixed(0)}K`, sub: `${payments.filter(p => p.status === "Refunded").length} transactions`, color: "#6B7280" },
-              { label: "Transactions", value: summary.count, sub: "Successful today", color: "#1B2D5B" },
+              { label: "Total Revenue", value: `₦${(summary.total / 1000000).toFixed(2)}M`, color: "#15803d" },
+              { label: "Pending", value: `₦${(summary.pending / 1000).toFixed(0)}K`, color: "#B8952A" },
+              { label: "Refunded", value: `₦${(summary.refunded / 1000).toFixed(0)}K`, color: "#6B7280" },
+              { label: "Transactions", value: summary.count, color: "#1B2D5B" },
             ].map((s) => (
               <div key={s.label} style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "20px 24px" }}>
                 <p style={{ color: "#9CA3AF", fontSize: "11px", margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "0.06em" }}>{s.label}</p>
-                <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "26px", fontWeight: 700, color: s.color, margin: "0 0 4px" }}>{s.value}</p>
-                <p style={{ fontSize: "11px", color: "#9CA3AF", margin: 0 }}>{s.sub}</p>
+                <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "26px", fontWeight: 700, color: s.color, margin: 0 }}>{s.value}</p>
               </div>
             ))}
           </div>
@@ -110,53 +224,51 @@ export default function Payments() {
             ))}
           </div>
 
-          {/* Table */}
-          <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ backgroundColor: "#F9FAFB" }}>
-                  {["Payment ID", "Guest", "Reservation", "Type", "Amount", "Method", "Date", "Status", ""].map((h, i) => (
-                    <th key={i} style={{ padding: "10px 16px", textAlign: "left", fontSize: "10px", fontWeight: 600, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: "1px solid #E5E7EB" }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((p, i) => (
-                  <tr key={p.id} style={{ borderBottom: i < filtered.length - 1 ? "1px solid #F3F4F6" : "none" }}>
-                    <td style={{ padding: "12px 16px", fontSize: "12px", color: "#1B2D5B", fontWeight: 600 }}>{p.id}</td>
-                    <td style={{ padding: "12px 16px", fontSize: "13px", color: "#1B2D5B", fontWeight: 500 }}>{p.guest}</td>
-                    <td style={{ padding: "12px 16px" }}>
-                      <p style={{ fontSize: "12px", color: "#374151", margin: 0 }}>{p.reservation}</p>
-                      <p style={{ fontSize: "11px", color: "#9CA3AF", margin: 0 }}>{p.room}</p>
-                    </td>
-                    <td style={{ padding: "12px 16px", fontSize: "12px", color: "#6B7280" }}>{p.type}</td>
-                    <td style={{ padding: "12px 16px", fontSize: "13px", color: "#1B2D5B", fontWeight: 600 }}>₦{p.amount.toLocaleString()}</td>
-                    <td style={{ padding: "12px 16px" }}>
-                      <span style={{ fontSize: "11px", color: methodColor[p.method], backgroundColor: "#F3F4F6", padding: "3px 8px", fontWeight: 500 }}>{p.method}</span>
-                    </td>
-                    <td style={{ padding: "12px 16px" }}>
-                      <p style={{ fontSize: "12px", color: "#374151", margin: 0 }}>{p.date}</p>
-                      <p style={{ fontSize: "11px", color: "#9CA3AF", margin: 0 }}>{p.time}</p>
-                    </td>
-                    <td style={{ padding: "12px 16px" }}>
-                      <span style={{ backgroundColor: statusBg[p.status], color: statusColor[p.status], padding: "3px 8px", fontSize: "10px", fontWeight: 600 }}>{p.status}</span>
-                    </td>
-                    <td style={{ padding: "12px 16px" }}>
-                      <Link href="#" style={{ color: "#B8952A", fontSize: "11px", textDecoration: "none", marginRight: "8px" }}>View</Link>
-                      {p.status === "Pending" && <Link href="#" style={{ color: "#15803d", fontSize: "11px", textDecoration: "none" }}>Confirm</Link>}
-                      {p.status === "Successful" && <Link href="#" style={{ color: "#dc2626", fontSize: "11px", textDecoration: "none" }}>Refund</Link>}
-                    </td>
+          {loading ? (
+            <div style={{ textAlign: "center", padding: "48px" }}>
+              <p style={{ color: "#9CA3AF" }}>Loading payments...</p>
+            </div>
+          ) : (
+            <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr style={{ backgroundColor: "#F9FAFB" }}>
+                    {["Guest", "Reservation", "Amount", "Method", "Reference", "Status", ""].map((h, i) => (
+                      <th key={i} style={{ padding: "10px 16px", textAlign: "left", fontSize: "10px", fontWeight: 600, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: "1px solid #E5E7EB" }}>{h}</th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {filtered.length === 0 && (
-              <div style={{ padding: "48px", textAlign: "center" }}>
-                <p style={{ color: "#9CA3AF", fontSize: "14px", margin: 0 }}>No payments found.</p>
-              </div>
-            )}
-          </div>
-
+                </thead>
+                <tbody>
+                  {filtered.length === 0 ? (
+                    <tr><td colSpan={7} style={{ padding: "48px", textAlign: "center", color: "#9CA3AF" }}>No payments found. Record your first payment.</td></tr>
+                  ) : filtered.map((p, i) => {
+                    const guest = getGuest(p.guest_id);
+                    const res = getReservation(p.reservation_id);
+                    return (
+                      <tr key={p.id} style={{ borderBottom: i < filtered.length - 1 ? "1px solid #F3F4F6" : "none" }}>
+                        <td style={{ padding: "12px 16px", fontSize: "13px", color: "#1B2D5B", fontWeight: 500 }}>{guest?.full_name || "—"}</td>
+                        <td style={{ padding: "12px 16px", fontSize: "12px", color: "#6B7280" }}>{res?.reservation_number || "—"}</td>
+                        <td style={{ padding: "12px 16px", fontSize: "13px", color: "#1B2D5B", fontWeight: 600 }}>₦{(p.amount || 0).toLocaleString()}</td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <span style={{ fontSize: "11px", color: "#1B2D5B", backgroundColor: "#F3F4F6", padding: "3px 8px", fontWeight: 500 }}>{p.method}</span>
+                        </td>
+                        <td style={{ padding: "12px 16px", fontSize: "12px", color: "#6B7280" }}>{p.reference || "—"}</td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <span style={{ backgroundColor: statusBg[p.status], color: statusColor[p.status], padding: "3px 8px", fontSize: "10px", fontWeight: 600 }}>{p.status}</span>
+                        </td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <div style={{ display: "flex", gap: "8px" }}>
+                            {p.status === "Pending" && <button onClick={() => handleConfirm(p.id)} style={{ color: "#15803d", fontSize: "11px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Confirm</button>}
+                            {p.status === "Successful" && <button onClick={() => handleRefund(p.id)} style={{ color: "#dc2626", fontSize: "11px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Refund</button>}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </main>
     </div>
