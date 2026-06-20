@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
 
 const navItems = [
   "Dashboard", "Reservations", "Guests", "Rooms", "Housekeeping",
@@ -9,14 +11,14 @@ const navItems = [
 ];
 
 const suggestions = [
-  "Show today's VIP guests",
-  "Which rooms need cleaning?",
-  "Summarize today's revenue",
-  "How many check-ins today?",
-  "Show pending reservations",
-  "Which rooms are available now?",
-  "List overdue payments",
-  "Show upcoming events this week",
+  "Show today's occupancy rate",
+  "How many guests are checked in?",
+  "What is the total revenue?",
+  "How many rooms are available?",
+  "Show pending housekeeping tasks",
+  "How many reservations are confirmed?",
+  "What are the pending payments?",
+  "Give me a full operations summary",
 ];
 
 type Message = {
@@ -28,16 +30,22 @@ type Message = {
 const initialMessages: Message[] = [
   {
     role: "assistant",
-    content: "Good morning! I'm your CMR AI Concierge. I have full visibility into your hotel operations at Parkview Hotel Abuja. How can I assist you today?\n\nYou can ask me about reservations, guests, room status, revenue, housekeeping, events, or any operational question.",
+    content: "Good day! I'm your CMR AI Concierge. I have live access to your hotel operations data. Ask me anything about your rooms, guests, reservations, revenue, housekeeping, or staff.",
     time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
   },
 ];
 
 export default function AIConcierge() {
+  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) { router.push("/login"); return; }
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -45,7 +53,7 @@ export default function AIConcierge() {
 
   const sendMessage = async (text?: string) => {
     const content = text || input.trim();
-    if (!content) return;
+    if (!content || loading) return;
 
     const userMessage: Message = {
       role: "user",
@@ -58,68 +66,14 @@ export default function AIConcierge() {
     setLoading(true);
 
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          system: `You are the CMR AI Concierge for Parkview Hotel Abuja, an intelligent hospitality operations assistant built into CMR Hospitality Suite by CMR Group.
-
-You have full knowledge of the hotel's current operations:
-
-ROOMS (100 total):
-- 42 Available, 38 Occupied, 12 Reserved, 6 Cleaning, 2 Maintenance
-- Room types: Suites (₦60,000-₦85,000/night), Deluxe (₦35,000-₦38,000/night), Standard (₦18,000-₦20,000/night)
-
-TODAY'S STATS:
-- Occupancy: 82% (+5% from yesterday)
-- Revenue: ₦2,450,000
-- Active Guests: 127
-- Check-ins today: 8, Check-outs today: 5
-
-CURRENT RESERVATIONS (active):
-- RES-001: Adebayo Okonkwo, Suite 101, Jun 16-19, Confirmed, Paid
-- RES-002: Amina Bello, Deluxe 204, Jun 16-18, Checked In, Paid
-- RES-003: Emeka Nwosu, Standard 312, Jun 17-20, Confirmed, Pending Payment
-- RES-004: Ngozi Adeyemi, Suite 105, Jun 18-22, Confirmed, Partial Payment
-- RES-006: Chioma Obi, Suite 304, Jun 20-25, Confirmed, Pending Payment
-
-VIP GUESTS:
-- Adebayo Okonkwo (Suite 101) — 4 stays, ₦480,000 lifetime spend
-- Ngozi Adeyemi (Suite 105) — 6 stays, ₦920,000 lifetime spend, Adeyemi Holdings
-- Chioma Obi (Suite 304) — Honeymoon guest, welcome package arranged
-
-HOUSEKEEPING:
-- 3 tasks pending, 2 in progress, 3 completed
-- Urgent: Room 202 AC repair needed
-- Room 105 deep cleaning scheduled 11AM (post checkout — honeymoon suite)
-
-EVENTS TODAY:
-- Executive Suite: First Bank Nigeria Board Meeting Jun 17
-- Grand Ballroom: Adeyemi Holdings Gala Jun 20 (350 guests, ₦500,000)
-
-PENDING PAYMENTS:
-- RES-003: Emeka Nwosu ₦60,000
-- RES-006: Chioma Obi ₦425,000
-
-STAFF ON DUTY:
-- Aisha Bello (Housekeeping Supervisor), Emeka Eze (Housekeeping), Fatima Usman (Front Desk), Chukwudi Okafor (Front Desk Evening), Yusuf Musa (Security Night)
-
-Answer questions about hotel operations clearly and concisely. Be professional, helpful, and specific with numbers and names. Format responses with line breaks for readability. Keep responses under 200 words unless a detailed breakdown is needed.`,
-          messages: [
-            ...messages.map((m) => ({ role: m.role, content: m.content })),
-            { role: "user", content },
-          ],
-        }),
+      const allMessages = [...messages, userMessage];
+      const data = await api.post("/api/v1/ai/chat", {
+        messages: allMessages.map(m => ({ role: m.role, content: m.content })),
       });
-
-      const data = await response.json();
-      const reply = data.content?.[0]?.text || "I'm sorry, I couldn't process that request. Please try again.";
 
       const assistantMessage: Message = {
         role: "assistant",
-        content: reply,
+        content: data.reply,
         time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
 
@@ -129,7 +83,7 @@ Answer questions about hotel operations clearly and concisely. Be professional, 
         ...prev,
         {
           role: "assistant",
-          content: "I'm having trouble connecting right now. Please check your connection and try again.",
+          content: "I'm having trouble connecting right now. Please try again.",
           time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
@@ -140,7 +94,6 @@ Answer questions about hotel operations clearly and concisely. Be professional, 
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", fontFamily: "'Inter', sans-serif", backgroundColor: "#F4F5F7" }}>
-
       <aside style={{ width: "220px", backgroundColor: "#1B2D5B", display: "flex", flexDirection: "column", position: "fixed", top: 0, left: 0, bottom: 0, zIndex: 20 }}>
         <div style={{ padding: "20px 16px", borderBottom: "1px solid #243d75" }}>
           <img src="/cmr-hospitality-logo.jpeg" alt="CMR Hospitality Suite" style={{ height: "44px", width: "auto" }} />
@@ -153,18 +106,15 @@ Answer questions about hotel operations clearly and concisely. Be professional, 
           ))}
         </nav>
         <div style={{ padding: "16px", borderTop: "1px solid #243d75" }}>
-          <p style={{ color: "#94a3b8", fontSize: "11px", margin: "0 0 2px" }}>Parkview Hotel Abuja</p>
-          <p style={{ color: "#6B7280", fontSize: "11px", margin: "0 0 8px" }}>Admin</p>
-          <Link href="/login" style={{ color: "#B8952A", fontSize: "12px", textDecoration: "none" }}>Sign out</Link>
+          <button onClick={() => { localStorage.removeItem("token"); localStorage.removeItem("user"); router.push("/login"); }} style={{ color: "#B8952A", fontSize: "12px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Sign out</button>
         </div>
       </aside>
 
       <main style={{ marginLeft: "220px", flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-
         <header style={{ backgroundColor: "white", borderBottom: "1px solid #E5E7EB", padding: "0 28px", height: "60px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 10 }}>
           <div>
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", fontWeight: 700, color: "#1B2D5B", margin: 0 }}>AI Concierge</h1>
-            <p style={{ color: "#9CA3AF", fontSize: "11px", margin: 0 }}>Parkview Hotel Abuja · Powered by CMR AI</p>
+            <p style={{ color: "#9CA3AF", fontSize: "11px", margin: 0 }}>Powered by CMR AI · Live hotel data</p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <div style={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#15803d" }} />
@@ -172,12 +122,10 @@ Answer questions about hotel operations clearly and concisely. Be professional, 
           </div>
         </header>
 
-        <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+        <div style={{ display: "flex", flex: 1, overflow: "hidden", height: "calc(100vh - 60px)" }}>
 
           {/* Chat */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-
-            {/* Messages */}
             <div style={{ flex: 1, overflowY: "auto", padding: "24px 28px" }}>
               {messages.map((msg, i) => (
                 <div key={i} style={{ marginBottom: "20px", display: "flex", flexDirection: "column", alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
@@ -199,16 +147,13 @@ Answer questions about hotel operations clearly and concisely. Be professional, 
                     <span style={{ fontSize: "11px", color: "#9CA3AF" }}>CMR AI is thinking...</span>
                   </div>
                   <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "14px 18px", display: "flex", gap: "4px", alignItems: "center" }}>
-                    {[0, 1, 2].map((j) => (
-                      <div key={j} style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#B8952A", animation: "pulse 1.4s ease-in-out infinite", animationDelay: `${j * 0.2}s` }} />
-                    ))}
+                    <span style={{ color: "#B8952A", fontSize: "18px" }}>···</span>
                   </div>
                 </div>
               )}
               <div ref={bottomRef} />
             </div>
 
-            {/* Input */}
             <div style={{ backgroundColor: "white", borderTop: "1px solid #E5E7EB", padding: "16px 28px" }}>
               <div style={{ display: "flex", gap: "8px" }}>
                 <input
@@ -227,15 +172,14 @@ Answer questions about hotel operations clearly and concisely. Be professional, 
                 </button>
               </div>
             </div>
-
           </div>
 
-          {/* Suggestions Panel */}
+          {/* Suggestions */}
           <div style={{ width: "260px", backgroundColor: "white", borderLeft: "1px solid #E5E7EB", padding: "20px", overflowY: "auto" }}>
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "13px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Suggested Questions</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               {suggestions.map((s) => (
-                <button key={s} onClick={() => sendMessage(s)} style={{ padding: "10px 12px", border: "1px solid #E5E7EB", backgroundColor: "white", fontSize: "12px", color: "#374151", cursor: "pointer", textAlign: "left", lineHeight: 1.4 }}>
+                <button key={s} onClick={() => sendMessage(s)} disabled={loading} style={{ padding: "10px 12px", border: "1px solid #E5E7EB", backgroundColor: "white", fontSize: "12px", color: "#374151", cursor: loading ? "not-allowed" : "pointer", textAlign: "left", lineHeight: 1.4 }}>
                   {s}
                 </button>
               ))}
@@ -243,7 +187,7 @@ Answer questions about hotel operations clearly and concisely. Be professional, 
             <div style={{ marginTop: "24px", padding: "16px", backgroundColor: "#F9F7F4", border: "1px solid #e5e0d8" }}>
               <p style={{ fontSize: "11px", color: "#B8952A", fontWeight: 600, margin: "0 0 6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Powered by</p>
               <p style={{ fontSize: "12px", color: "#1B2D5B", fontWeight: 600, margin: "0 0 4px" }}>CMR AI</p>
-              <p style={{ fontSize: "11px", color: "#6B7280", margin: 0, lineHeight: 1.5 }}>Anthropic Claude · CMR Hospitality Suite</p>
+              <p style={{ fontSize: "11px", color: "#6B7280", margin: 0, lineHeight: 1.5 }}>Anthropic Claude · Live hotel data · Secure backend</p>
             </div>
           </div>
 

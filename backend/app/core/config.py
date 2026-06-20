@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from typing import Optional
 
 class Settings(BaseSettings):
     DATABASE_URL: str
@@ -8,6 +9,7 @@ class Settings(BaseSettings):
     APP_NAME: str = "CMR Hospitality Suite"
     APP_VERSION: str = "1.0.0"
     ENVIRONMENT: str = "development"
+    ANTHROPIC_API_KEY: Optional[str] = None
 
     class Config:
         env_file = ".env"
