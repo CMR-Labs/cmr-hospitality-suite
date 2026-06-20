@@ -15,7 +15,7 @@ type Payment = {
   notes: string;
 };
 
-type Guest = { id: string; full_name: string };
+type Guest = { id: string; full_name: string; email: string };
 type Reservation = { id: string; reservation_number: string };
 
 const statusColor: Record<string, string> = {
@@ -107,6 +107,26 @@ export default function Payments() {
     } catch { }
   };
 
+  const handlePaystack = async (reservationId: string, guestId: string, amount: number) => {
+    const guest = guests.find(g => g.id === guestId);
+    if (!guest?.email) {
+      alert("Guest email is required for Paystack payment");
+      return;
+    }
+    try {
+      const data = await api.post("/api/v1/paystack/initialize", {
+        email: guest.email,
+        amount: amount,
+        reservation_id: reservationId,
+        guest_id: guestId,
+      });
+      window.open(data.authorization_url, "_blank");
+      setTimeout(fetchData, 5000);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Payment initialization failed");
+    }
+  };
+
   const getGuest = (id: string) => guests.find(g => g.id === id);
   const getReservation = (id: string) => reservations.find(r => r.id === id);
 
@@ -156,7 +176,6 @@ export default function Payments() {
 
         <div style={{ padding: "28px", flex: 1 }}>
 
-          {/* Add Payment Modal */}
           {showAdd && (
             <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div style={{ backgroundColor: "white", padding: "32px", width: "480px", maxWidth: "90vw" }}>
@@ -202,7 +221,6 @@ export default function Payments() {
             </div>
           )}
 
-          {/* Summary */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "24px" }}>
             {[
               { label: "Total Revenue", value: `₦${(summary.total / 1000000).toFixed(2)}M`, color: "#15803d" },
@@ -217,7 +235,6 @@ export default function Payments() {
             ))}
           </div>
 
-          {/* Filters */}
           <div style={{ display: "flex", gap: "4px", marginBottom: "20px" }}>
             {filters.map((f) => (
               <button key={f} onClick={() => setActiveFilter(f)} style={{ padding: "6px 14px", fontSize: "12px", border: "1px solid #E5E7EB", backgroundColor: activeFilter === f ? "#1B2D5B" : "white", color: activeFilter === f ? "white" : "#6B7280", cursor: "pointer" }}>{f}</button>
@@ -259,6 +276,7 @@ export default function Payments() {
                         <td style={{ padding: "12px 16px" }}>
                           <div style={{ display: "flex", gap: "8px" }}>
                             {p.status === "Pending" && <button onClick={() => handleConfirm(p.id)} style={{ color: "#15803d", fontSize: "11px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Confirm</button>}
+                            {p.status === "Pending" && p.reservation_id && <button onClick={() => handlePaystack(p.reservation_id, p.guest_id, p.amount)} style={{ color: "#B8952A", fontSize: "11px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Pay via Paystack</button>}
                             {p.status === "Successful" && <button onClick={() => handleRefund(p.id)} style={{ color: "#dc2626", fontSize: "11px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Refund</button>}
                           </div>
                         </td>

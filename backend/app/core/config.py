@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     APP_VERSION: str = "1.0.0"
     ENVIRONMENT: str = "development"
     ANTHROPIC_API_KEY: Optional[str] = None
+    PAYSTACK_SECRET_KEY: Optional[str] = None
 
     class Config:
         env_file = ".env"

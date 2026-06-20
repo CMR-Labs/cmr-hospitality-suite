@@ -19,7 +19,7 @@ type Reservation = {
   notes: string;
 };
 
-type Guest = { id: string; full_name: string; phone: string };
+type Guest = { id: string; full_name: string; phone: string; email: string };
 type Room = { id: string; room_number: string };
 
 const statusColor: Record<string, string> = {
@@ -115,6 +115,26 @@ export default function Reservations() {
     } catch { }
   };
 
+  const handlePaystack = async (reservationId: string, guestId: string, amount: number) => {
+    const guest = guests.find(g => g.id === guestId);
+    if (!guest?.email) {
+      alert("Guest email is required for Paystack payment");
+      return;
+    }
+    try {
+      const data = await api.post("/api/v1/paystack/initialize", {
+        email: guest.email,
+        amount: amount,
+        reservation_id: reservationId,
+        guest_id: guestId,
+      });
+      window.open(data.authorization_url, "_blank");
+      setTimeout(fetchData, 5000);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Payment initialization failed");
+    }
+  };
+
   const getGuest = (id: string) => guests.find(g => g.id === id);
   const getRoom = (id: string) => rooms.find(r => r.id === id);
 
@@ -165,7 +185,6 @@ export default function Reservations() {
 
         <div style={{ padding: "28px", flex: 1 }}>
 
-          {/* Add Reservation Modal */}
           {showAdd && (
             <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div style={{ backgroundColor: "white", padding: "32px", width: "520px", maxWidth: "90vw", maxHeight: "90vh", overflowY: "auto" }}>
@@ -221,7 +240,6 @@ export default function Reservations() {
             </div>
           )}
 
-          {/* Summary */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "12px", marginBottom: "24px" }}>
             {[
               { label: "Total", value: summary.total, color: "#1B2D5B" },
@@ -237,7 +255,6 @@ export default function Reservations() {
             ))}
           </div>
 
-          {/* Filters */}
           <div style={{ display: "flex", gap: "4px", marginBottom: "20px" }}>
             {filters.map((f) => (
               <button key={f} onClick={() => setActiveFilter(f)} style={{ padding: "6px 14px", fontSize: "12px", border: "1px solid #E5E7EB", backgroundColor: activeFilter === f ? "#1B2D5B" : "white", color: activeFilter === f ? "white" : "#6B7280", cursor: "pointer" }}>{f}</button>
@@ -279,9 +296,16 @@ export default function Reservations() {
                           <span style={{ backgroundColor: statusBg[r.status], color: statusColor[r.status], padding: "3px 8px", fontSize: "10px", fontWeight: 600 }}>{r.status}</span>
                         </td>
                         <td style={{ padding: "12px 16px" }}>
-                          <div style={{ display: "flex", gap: "8px" }}>
-                            {r.status === "Confirmed" && <button onClick={() => handleAction(r.id, "checkin")} style={{ color: "#15803d", fontSize: "11px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Check In</button>}
-                            {r.status === "Checked In" && <button onClick={() => handleAction(r.id, "checkout")} style={{ color: "#1B2D5B", fontSize: "11px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Check Out</button>}
+                          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                            {r.status === "Confirmed" && (
+                              <button onClick={() => handleAction(r.id, "checkin")} style={{ color: "#15803d", fontSize: "11px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Check In</button>
+                            )}
+                            {r.status === "Checked In" && (
+                              <button onClick={() => handleAction(r.id, "checkout")} style={{ color: "#1B2D5B", fontSize: "11px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Check Out</button>
+                            )}
+                            {r.payment_status === "Pending" && guest?.email && (
+                              <button onClick={() => handlePaystack(r.id, r.guest_id, r.total_amount)} style={{ color: "#B8952A", fontSize: "11px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Pay via Paystack</button>
+                            )}
                           </div>
                         </td>
                       </tr>

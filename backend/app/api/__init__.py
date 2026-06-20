@@ -9,6 +9,7 @@ from app.api.routes.housekeeping import router as housekeeping_router
 from app.api.routes.events import router as events_router
 from app.api.routes.analytics import router as analytics_router
 from app.api.routes.ai import router as ai_router
+from app.api.routes.paystack import router as paystack_router
 
 api_router = APIRouter(prefix="/api/v1")
 api_router.include_router(auth_router)
@@ -21,3 +22,4 @@ api_router.include_router(housekeeping_router)
 api_router.include_router(events_router)
 api_router.include_router(analytics_router)
 api_router.include_router(ai_router)
+api_router.include_router(paystack_router)
