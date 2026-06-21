@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
     ANTHROPIC_API_KEY: Optional[str] = None
     PAYSTACK_SECRET_KEY: Optional[str] = None
+    RESEND_API_KEY: Optional[str] = None
+    FROM_EMAIL: str = "noreply@cmrhospitality.com"
+    FRONTEND_URL: str = "https://cmr-hospitality-suite.vercel.app"
 
     class Config:
         env_file = ".env"

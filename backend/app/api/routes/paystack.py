@@ -143,3 +143,24 @@ async def list_transactions(
         raise HTTPException(status_code=400, detail="Failed to fetch transactions")
 
     return result["data"]
+
+@router.post("/webhook")
+async def paystack_webhook(request: dict, db: AsyncSession = Depends(get_db)):
+    event = request.get("event")
+    data = request.get("data", {})
+
+    if event == "charge.success":
+        reference = data.get("reference")
+        if reference:
+            result = await db.execute(select(Payment).where(Payment.reference == reference))
+            payment = result.scalar_one_or_none()
+            if payment:
+                payment.status = "Successful"
+                if payment.reservation_id:
+                    res_result = await db.execute(select(Reservation).where(Reservation.id == payment.reservation_id))
+                    reservation = res_result.scalar_one_or_none()
+                    if reservation:
+                        reservation.payment_status = "Paid"
+                await db.commit()
+
+    return {"status": "ok"}
