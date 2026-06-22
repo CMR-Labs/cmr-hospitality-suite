@@ -157,25 +157,25 @@ export default function Settings() {
                       {
                         plan: "Starter", price: "₦31,083", period: "/month", annual: "₦331,970/year",
                         desc: "Ideal for small hotels, lodges, and guest houses.",
-                        features: ["1 Hotel", "Up to 7 Rooms", "Reservations Management", "Guest Management", "Payments Management", "Basic Analytics", "Hotel Profile & Hotel Image", "1 Manager Account", "Email Support", "✗ No Room Photo Uploads", "✗ No AI Concierge", "✗ No Event Center Management"],
+                        features: ["Upload 1 Hotel", "11 Rooms", "Reservations Management", "Guest Management", "Payments Management", "Basic Analytics", "1 Manager Account", "Email Support", "Available on Mobile App", "✗ No Room Photo Uploads", "✗ No AI Concierge", "✗ No Event Center Management"],
                         current: true, popular: false,
                       },
                       {
-                        plan: "Professional", price: "₦155,000", period: "/month", annual: "₦1,654,800/year — 11% off",
+                        plan: "Professional", price: "₦161,250", period: "/month", annual: "₦1,722,150/year — 11% off",
                         desc: "Ideal for growing hotels requiring automation and analytics.",
-                        features: ["Up to 2 Hotels", "Up to 25 Rooms", "1 Event Center", "AI Concierge", "Advanced Analytics", "Up to 6 Staff Accounts", "1 Manager Account", "Room Photos (3/room, 1MB max)", "Event Center Photos (5, 1MB max)", "Email Notifications", "Enhanced Reporting", "Priority Support"],
+                        features: ["Upload to 2 Hotels", "25 Rooms", "1 Event Center", "AI Concierge", "Advanced Analytics", "6 Staff Accounts", "1 Manager Account", "Email Notifications", "Enhanced Reporting", "Priority Support"],
                         current: false, popular: true,
                       },
                       {
-                        plan: "Professional Elite", price: "₦550,000", period: "/month", annual: "₦5,874,000/year — 11% off",
+                        plan: "Professional Elite", price: "₦573,901+", period: "/month",
                         desc: "Ideal for hotel groups, resorts, and multi-property operators.",
-                        features: ["Up to 5 Hotels", "Up to 99 Rooms", "Up to 5 Event Centers", "AI Concierge", "Advanced Analytics", "Custom Dashboard", "Up to 23 Staff Accounts", "Up to 7 Manager Accounts", "Club, Gym, Pool & Bar Mgmt", "Room Photos (2MB max)", "Event Center Photos (13, 3MB)", "Facility Photos (10, 3MB)", "High-Priority Support"],
+                        features: ["Upload 5 Hotels", "73+ Rooms", "5 Event Centers", "Club, Gym, Pool & Bar Mgmt", "AI Concierge (unlimited)", "Advanced Analytics", "Custom Dashboard plus live update", "23 Staff Accounts", "7 Manager Accounts", "High-Priority Support"],
                         current: false, popular: false,
                       },
                       {
                         plan: "Enterprise", price: "₦13M+", period: "", annual: "Custom pricing — contact sales",
                         desc: "For hotel chains, luxury resorts, and institutional hospitality.",
-                        features: ["Unlimited Hotels & Rooms", "Unlimited Event Centers", "Dedicated Infrastructure", "White-Label Options", "Custom Integrations & API", "Unlimited Staff & Managers", "Advanced Reporting", "Dedicated Account Manager", "SLA Coverage", "Data Migration Assistance", "4 Months Implementation", "4 Days On-Site Training", "Go-Live Support"],
+                        features: ["Unlimited Hotels & Rooms", "Unlimited Event Centers", "Dedicated Infrastructure", "White-Label Options", "Custom Integrations & API", "Unlimited Staff & Managers", "Advanced Reporting", "Dedicated Account Manager", "SLA Coverage", "Data Migration Assistance", "4 Months Implementation", "Go-Live Support"],
                         current: false, popular: false,
                       },
                     ].map((p) => (
