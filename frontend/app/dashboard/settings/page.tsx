@@ -149,13 +149,13 @@ export default function Settings() {
         <div>
           <p style={{ fontSize: "14px", fontWeight: 600, color: "#1B2D5B", margin: "0 0 4px" }}>Starter Plan</p>
           <p style={{ fontSize: "12px", color: "#6B7280", margin: "0 0 4px" }}>₦31,083/month · Currently active — beta period</p>
-          <p style={{ fontSize: "11px", color: "#9CA3AF", margin: 0 }}>1 Hotel · Up to 7 Rooms · Basic Analytics</p>
+          <p style={{ fontSize: "11px", color: "#9CA3AF", margin: 0 }}>1 Hotel · Up to 7 Rooms · Basic Analytics · 1 Manager Account</p>
         </div>
         <span style={{ backgroundColor: "#F0FDF4", color: "#15803d", padding: "4px 10px", fontSize: "11px", fontWeight: 600 }}>Active</span>
       </div>
     </div>
 
-    {/* Plans */}
+    {/* Plans Grid */}
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "32px" }}>
       {[
         {
@@ -163,46 +163,115 @@ export default function Settings() {
           price: "₦31,083",
           period: "/month",
           annual: "₦331,970/year",
-          features: ["1 Hotel", "Up to 7 Rooms", "Reservations & Guests", "Payments", "Basic Analytics", "Email Support", "1 Manager Account"],
+          desc: "Ideal for small hotels, lodges, and guest houses.",
+          features: [
+            "1 Hotel",
+            "Up to 7 Rooms",
+            "Reservations Management",
+            "Guest Management",
+            "Payments Management",
+            "Basic Analytics",
+            "Hotel Profile & Hotel Image",
+            "1 Manager Account",
+            "Email Support",
+            "✗ No Room Photo Uploads",
+            "✗ No AI Concierge",
+            "✗ No Event Center Management",
+          ],
           current: true,
           popular: false,
+          color: "#6B7280",
         },
         {
           plan: "Professional",
           price: "₦155,000",
           period: "/month",
-          annual: "₦1,654,800/year (11% off)",
-          features: ["Up to 2 Hotels", "Up to 25 Rooms", "1 Event Center", "AI Concierge", "6 Staff Accounts",  "Advanced Analytics", "Priority Support"],
+          annual: "₦1,654,800/year — 11% off",
+          desc: "Ideal for growing hotels requiring automation and analytics.",
+          features: [
+            "Up to 2 Hotels",
+            "Up to 25 Rooms",
+            "1 Event Center",
+            "AI Concierge",
+            "Advanced Analytics",
+            "Up to 6 Staff Accounts",
+            "1 Manager Account",
+            "Room Photos (3/room, 1MB max)",
+            "Event Center Photos (5, 1MB max)",
+            "Email Notifications",
+            "Enhanced Reporting",
+            "Priority Support",
+          ],
           current: false,
           popular: true,
+          color: "#1B2D5B",
         },
         {
           plan: "Professional Elite",
           price: "₦550,000",
           period: "/month",
-          annual: "₦5,874,000/year (11% off)",
-          features: ["Up to 5 Hotels", "Up to 99 Rooms", "5 Event Centers", "AI Concierge", "23 Staff Accounts", "Club/Gym/Bar Mgmt", "Custom Dashboard", "High-Priority Support"],
+          annual: "₦5,874,000/year — 11% off",
+          desc: "Ideal for hotel groups, resorts, and multi-property operators.",
+          features: [
+            "Up to 5 Hotels",
+            "Up to 99 Rooms",
+            "Up to 5 Event Centers",
+            "AI Concierge",
+            "Advanced Analytics",
+            "Custom Dashboard",
+            "Up to 23 Staff Accounts",
+            "Up to 7 Manager Accounts",
+            "Club, Gym, Pool & Bar Mgmt",
+            "Room Photos (2MB max)",
+            "Event Center Photos (13, 3MB)",
+            "Facility Photos (10, 3MB)",
+            "High-Priority Support",
+          ],
           current: false,
           popular: false,
+          color: "#B8952A",
         },
         {
           plan: "Enterprise",
           price: "₦13M+",
           period: "",
-          annual: "Custom pricing",
-          features: ["Unlimited Hotels & Rooms", "White-Label Options", "Custom Integrations", "Dedicated Infrastructure", "4 Months Implementation", "On-Site Training", "SLA Coverage", "Dedicated Account Manager"],
+          annual: "Custom pricing — contact sales",
+          desc: "For hotel chains, luxury resorts, and institutional hospitality.",
+          features: [
+            "Unlimited Hotels & Rooms",
+            "Unlimited Event Centers",
+            "Dedicated Infrastructure",
+            "White-Label Options",
+            "Custom Integrations & API",
+            "Unlimited Staff & Managers",
+            "Advanced Reporting",
+            "Dedicated Account Manager",
+            "SLA Coverage",
+            "Data Migration Assistance",
+            "4 Months Implementation",
+            "4 Days On-Site Training",
+            "Go-Live Support",
+          ],
           current: false,
           popular: false,
+          color: "#1B2D5B",
         },
       ].map((p) => (
-        <div key={p.plan} style={{ border: p.popular ? "2px solid #1B2D5B" : "1px solid #E5E7EB", padding: "20px", position: "relative" }}>
-          {p.popular && <p style={{ fontSize: "10px", color: "#B8952A", fontWeight: 700, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>⭐ Most Popular</p>}
-          <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 4px" }}>{p.plan}</p>
-          <p style={{ fontSize: "22px", fontWeight: 700, color: "#B8952A", margin: "0 0 2px" }}>{p.price}<span style={{ fontSize: "13px", fontWeight: 400, color: "#6B7280" }}>{p.period}</span></p>
-          <p style={{ fontSize: "11px", color: "#9CA3AF", margin: "0 0 16px" }}>{p.annual}</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "16px" }}>
+        <div key={p.plan} style={{ border: p.popular ? "2px solid #1B2D5B" : "1px solid #E5E7EB", padding: "20px", display: "flex", flexDirection: "column" }}>
+          {p.popular && (
+            <p style={{ fontSize: "10px", color: "#B8952A", fontWeight: 700, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>⭐ Most Popular</p>
+          )}
+          <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "17px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 4px" }}>{p.plan}</p>
+          <p style={{ fontSize: "22px", fontWeight: 700, color: "#B8952A", margin: "0 0 2px" }}>
+            {p.price}<span style={{ fontSize: "12px", fontWeight: 400, color: "#6B7280" }}>{p.period}</span>
+          </p>
+          <p style={{ fontSize: "11px", color: "#9CA3AF", margin: "0 0 8px" }}>{p.annual}</p>
+          <p style={{ fontSize: "12px", color: "#6B7280", margin: "0 0 16px", lineHeight: 1.5 }}>{p.desc}</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "5px", marginBottom: "20px", flex: 1 }}>
             {p.features.map(f => (
-              <p key={f} style={{ fontSize: "11px", color: "#6B7280", margin: 0 }}>✓ {f}</p>
+              <p key={f} style={{ fontSize: "11px", color: f.startsWith("✗") ? "#9CA3AF" : "#374151", margin: 0, lineHeight: 1.4 }}>
+                {f.startsWith("✗") ? f : `✓ ${f}`}
+              </p>
             ))}
           </div>
           <button style={{ width: "100%", backgroundColor: p.current ? "#F3F4F6" : p.popular ? "#1B2D5B" : "white", color: p.current ? "#9CA3AF" : p.popular ? "white" : "#1B2D5B", padding: "10px", fontSize: "12px", fontWeight: 600, border: p.current ? "1px solid #E5E7EB" : "1px solid #1B2D5B", cursor: p.current ? "not-allowed" : "pointer" }}>
@@ -213,7 +282,7 @@ export default function Settings() {
     </div>
 
     {/* Add-ons */}
-    <div>
+    <div style={{ marginBottom: "32px" }}>
       <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "14px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Optional Add-Ons</h3>
       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         {[
@@ -230,42 +299,42 @@ export default function Settings() {
         ))}
       </div>
     </div>
+
+    {/* Hospitality Website Package */}
+    <div style={{ border: "1px solid #E5E7EB", padding: "20px", backgroundColor: "#F9F7F4" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+        <div>
+          <p style={{ fontSize: "14px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 4px" }}>Hospitality Website Package</p>
+          <p style={{ fontSize: "12px", color: "#6B7280", margin: 0 }}>For hotels requiring a professional online presence.</p>
+        </div>
+        <p style={{ fontSize: "14px", fontWeight: 700, color: "#B8952A", margin: 0 }}>₦250,000 – ₦750,000</p>
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}>
+        {["Custom Hotel Website", "Mobile Responsive", "Contact Forms", "Email Integration", "Image Gallery", "Booking Request Form", "SEO Setup", "Social Media Integration", "Basic Analytics"].map(f => (
+          <span key={f} style={{ fontSize: "11px", color: "#374151", backgroundColor: "white", border: "1px solid #E5E7EB", padding: "3px 10px" }}>✓ {f}</span>
+        ))}
+      </div>
+      <p style={{ fontSize: "11px", color: "#9CA3AF", margin: "0 0 12px" }}>Custom requirements are quoted separately.</p>
+      <button style={{ backgroundColor: "#1B2D5B", color: "white", padding: "10px 20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer" }}>Request Quote</button>
+    </div>
+
+    {/* Why Choose CMR */}
+    <div style={{ marginTop: "32px", padding: "20px", border: "1px solid #E5E7EB" }}>
+      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "14px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Why Hotels Choose CMR Hospitality Suite</h3>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "8px" }}>
+        {[
+          "Modern Hotel Operations Platform",
+          "AI-Powered Concierge",
+          "Built for African Hospitality Businesses",
+          "Secure Cloud Infrastructure",
+          "Real-Time Analytics",
+          "Multi-Property Management",
+          "Dedicated Support",
+          "Scalable Enterprise Architecture",
+        ].map(r => (
+          <p key={r} style={{ fontSize: "12px", color: "#374151", margin: 0 }}>✅ {r}</p>
+        ))}
+      </div>
+    </div>
   </div>
 )}
-
-              {activeTab === "integrations" && (
-                <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "28px" }}>
-                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 24px" }}>Integrations</h2>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                    {[
-                      { name: "Paystack", desc: "Accept payments from guests via card, bank transfer and USSD.", status: "Not Connected", color: "#6B7280" },
-                      { name: "Flutterwave", desc: "Alternative payment gateway for African markets.", status: "Not Connected", color: "#6B7280" },
-                      { name: "Resend", desc: "Send booking confirmations and notifications via email.", status: "Not Connected", color: "#6B7280" },
-                      { name: "Anthropic AI", desc: "Power the CMR AI Concierge with Claude AI.", status: "Connected", color: "#15803d" },
-                      { name: "WhatsApp Business", desc: "Send booking confirmations and updates via WhatsApp.", status: "Coming Soon", color: "#B8952A" },
-                      { name: "Termii SMS", desc: "Send SMS alerts and notifications to guests.", status: "Coming Soon", color: "#B8952A" },
-                    ].map((integration) => (
-                      <div key={integration.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", border: "1px solid #E5E7EB" }}>
-                        <div>
-                          <p style={{ fontSize: "14px", fontWeight: 600, color: "#1B2D5B", margin: "0 0 4px" }}>{integration.name}</p>
-                          <p style={{ fontSize: "12px", color: "#6B7280", margin: 0 }}>{integration.desc}</p>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                          <span style={{ fontSize: "11px", fontWeight: 600, color: integration.color }}>{integration.status}</span>
-                          {integration.status === "Not Connected" && (
-                            <button style={{ padding: "6px 14px", fontSize: "12px", border: "1px solid #1B2D5B", backgroundColor: "white", color: "#1B2D5B", cursor: "pointer", fontWeight: 500 }}>Connect</button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-}
