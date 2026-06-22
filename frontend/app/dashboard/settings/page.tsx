@@ -334,7 +334,9 @@ export default function Settings() {
         ].map(r => (
           <p key={r} style={{ fontSize: "12px", color: "#374151", margin: 0 }}>✅ {r}</p>
         ))}
+        </div>
       </div>
-    </div>
+    </main>
   </div>
-)}
+  );
+}
