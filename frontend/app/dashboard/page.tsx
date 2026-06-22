@@ -69,12 +69,12 @@ export default function Dashboard() {
   ] : [];
 
   const quickActions = [
-    { label: "New Reservation", href: "/dashboard/reservations/new" },
-    { label: "Add Guest", href: "/dashboard/guests/new" },
-    { label: "Add Room", href: "/dashboard/rooms/new" },
-    { label: "Book Event Hall", href: "/dashboard/events/new" },
-    { label: "Record Payment", href: "/dashboard/payments/new" },
-    { label: "Generate Report", href: "/dashboard/reports" },
+  { label: "New Reservation", href: "/dashboard/reservations" },
+  { label: "Add Guest", href: "/dashboard/guests" },
+  { label: "Add Room", href: "/dashboard/rooms" },
+  { label: "Book Event Hall", href: "/dashboard/event-halls" },
+  { label: "Record Payment", href: "/dashboard/payments" },
+  { label: "Generate Report", href: "/dashboard/reports" },
   ];
 
   return (
@@ -106,7 +106,7 @@ export default function Dashboard() {
             <p style={{ color: "#9CA3AF", fontSize: "11px", margin: 0 }}>Live hotel operations overview</p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Link href="/dashboard/reservations/new" style={{ backgroundColor: "#B8952A", color: "white", padding: "8px 18px", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>+ New Reservation</Link>
+            <Link href="/dashboard/reservations" style={{ backgroundColor: "#B8952A", color: "white", padding: "8px 18px", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>+ New Reservation</Link>
             <div style={{ width: "34px", height: "34px", backgroundColor: "#1B2D5B", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: "12px", fontWeight: 700 }}>
               {user?.full_name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "HM"}
             </div>

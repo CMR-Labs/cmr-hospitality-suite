@@ -139,41 +139,99 @@ export default function Settings() {
               )}
 
               {activeTab === "billing" && (
-                <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "28px" }}>
-                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 8px" }}>Billing & Subscription</h2>
-                  <p style={{ color: "#6B7280", fontSize: "13px", margin: "0 0 24px" }}>Manage your CMR Hospitality Suite subscription.</p>
-                  <div style={{ border: "1px solid #E5E7EB", padding: "20px", marginBottom: "24px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <div>
-                        <p style={{ fontSize: "14px", fontWeight: 600, color: "#1B2D5B", margin: "0 0 4px" }}>Starter Plan</p>
-                        <p style={{ fontSize: "12px", color: "#6B7280", margin: 0 }}>Currently active — free during beta</p>
-                      </div>
-                      <span style={{ backgroundColor: "#F0FDF4", color: "#15803d", padding: "4px 10px", fontSize: "11px", fontWeight: 600 }}>Active</span>
-                    </div>
-                  </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
-                    {[
-                      { plan: "Starter", price: "Free", features: ["1 Hotel", "Up to 50 rooms", "Basic analytics", "Email support"] },
-                      { plan: "Professional", price: "₦50,000/mo", features: ["1 Hotel", "Unlimited rooms", "AI Concierge", "Advanced analytics", "Priority support"] },
-                      { plan: "Enterprise", price: "Custom", features: ["Multiple hotels", "Unlimited rooms", "Full AI suite", "Custom integrations", "Dedicated support"] },
-                    ].map((p) => (
-                      <div key={p.plan} style={{ border: p.plan === "Professional" ? "2px solid #1B2D5B" : "1px solid #E5E7EB", padding: "20px" }}>
-                        {p.plan === "Professional" && <p style={{ fontSize: "10px", color: "#B8952A", fontWeight: 700, margin: "0 0 8px", textTransform: "uppercase" }}>Recommended</p>}
-                        <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 4px" }}>{p.plan}</p>
-                        <p style={{ fontSize: "18px", fontWeight: 700, color: "#B8952A", margin: "0 0 16px" }}>{p.price}</p>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "16px" }}>
-                          {p.features.map(f => (
-                            <p key={f} style={{ fontSize: "12px", color: "#6B7280", margin: 0 }}>✓ {f}</p>
-                          ))}
-                        </div>
-                        <button style={{ width: "100%", backgroundColor: p.plan === "Professional" ? "#1B2D5B" : "white", color: p.plan === "Professional" ? "white" : "#1B2D5B", padding: "10px", fontSize: "12px", fontWeight: 600, border: "1px solid #1B2D5B", cursor: "pointer" }}>
-                          {p.plan === "Starter" ? "Current Plan" : "Upgrade"}
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+  <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "28px" }}>
+    <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 8px" }}>Billing & Subscription</h2>
+    <p style={{ color: "#6B7280", fontSize: "13px", margin: "0 0 24px" }}>Manage your CMR Hospitality Suite subscription.</p>
+
+    {/* Current Plan */}
+    <div style={{ border: "1px solid #E5E7EB", padding: "20px", marginBottom: "32px", backgroundColor: "#F9F7F4" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <p style={{ fontSize: "14px", fontWeight: 600, color: "#1B2D5B", margin: "0 0 4px" }}>Starter Plan</p>
+          <p style={{ fontSize: "12px", color: "#6B7280", margin: "0 0 4px" }}>₦31,083/month · Currently active — beta period</p>
+          <p style={{ fontSize: "11px", color: "#9CA3AF", margin: 0 }}>1 Hotel · Up to 7 Rooms · Basic Analytics</p>
+        </div>
+        <span style={{ backgroundColor: "#F0FDF4", color: "#15803d", padding: "4px 10px", fontSize: "11px", fontWeight: 600 }}>Active</span>
+      </div>
+    </div>
+
+    {/* Plans */}
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "32px" }}>
+      {[
+        {
+          plan: "Starter",
+          price: "₦31,083",
+          period: "/month",
+          annual: "₦331,970/year",
+          features: ["1 Hotel", "Up to 7 Rooms", "Reservations & Guests", "Payments", "Basic Analytics", "Email Support", "1 Manager Account"],
+          current: true,
+          popular: false,
+        },
+        {
+          plan: "Professional",
+          price: "₦155,000",
+          period: "/month",
+          annual: "₦1,654,800/year (11% off)",
+          features: ["Up to 2 Hotels", "Up to 25 Rooms", "1 Event Center", "AI Concierge", "6 Staff Accounts",  "Advanced Analytics", "Priority Support"],
+          current: false,
+          popular: true,
+        },
+        {
+          plan: "Professional Elite",
+          price: "₦550,000",
+          period: "/month",
+          annual: "₦5,874,000/year (11% off)",
+          features: ["Up to 5 Hotels", "Up to 99 Rooms", "5 Event Centers", "AI Concierge", "23 Staff Accounts", "Club/Gym/Bar Mgmt", "Custom Dashboard", "High-Priority Support"],
+          current: false,
+          popular: false,
+        },
+        {
+          plan: "Enterprise",
+          price: "₦13M+",
+          period: "",
+          annual: "Custom pricing",
+          features: ["Unlimited Hotels & Rooms", "White-Label Options", "Custom Integrations", "Dedicated Infrastructure", "4 Months Implementation", "On-Site Training", "SLA Coverage", "Dedicated Account Manager"],
+          current: false,
+          popular: false,
+        },
+      ].map((p) => (
+        <div key={p.plan} style={{ border: p.popular ? "2px solid #1B2D5B" : "1px solid #E5E7EB", padding: "20px", position: "relative" }}>
+          {p.popular && <p style={{ fontSize: "10px", color: "#B8952A", fontWeight: 700, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>⭐ Most Popular</p>}
+          <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 4px" }}>{p.plan}</p>
+          <p style={{ fontSize: "22px", fontWeight: 700, color: "#B8952A", margin: "0 0 2px" }}>{p.price}<span style={{ fontSize: "13px", fontWeight: 400, color: "#6B7280" }}>{p.period}</span></p>
+          <p style={{ fontSize: "11px", color: "#9CA3AF", margin: "0 0 16px" }}>{p.annual}</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "16px" }}>
+            {p.features.map(f => (
+              <p key={f} style={{ fontSize: "11px", color: "#6B7280", margin: 0 }}>✓ {f}</p>
+            ))}
+          </div>
+          <button style={{ width: "100%", backgroundColor: p.current ? "#F3F4F6" : p.popular ? "#1B2D5B" : "white", color: p.current ? "#9CA3AF" : p.popular ? "white" : "#1B2D5B", padding: "10px", fontSize: "12px", fontWeight: 600, border: p.current ? "1px solid #E5E7EB" : "1px solid #1B2D5B", cursor: p.current ? "not-allowed" : "pointer" }}>
+            {p.current ? "Current Plan" : p.plan === "Enterprise" ? "Contact Sales" : "Upgrade"}
+          </button>
+        </div>
+      ))}
+    </div>
+
+    {/* Add-ons */}
+    <div>
+      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "14px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Optional Add-Ons</h3>
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        {[
+          { name: "Additional Rooms", price: "₦2,500/month per room" },
+          { name: "Additional Staff Accounts", price: "₦1,500/month per user" },
+          { name: "WhatsApp Integration", price: "₦15,000/month" },
+          { name: "SMS Notifications", price: "Pay-as-you-use" },
+          { name: "Custom Domain Setup", price: "₦25,000/year" },
+        ].map((a) => (
+          <div key={a.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", border: "1px solid #E5E7EB" }}>
+            <span style={{ fontSize: "13px", color: "#374151" }}>{a.name}</span>
+            <span style={{ fontSize: "13px", color: "#B8952A", fontWeight: 600 }}>{a.price}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
 
               {activeTab === "integrations" && (
                 <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "28px" }}>
