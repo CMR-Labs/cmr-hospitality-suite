@@ -1,5 +1,6 @@
-from sqlalchemy import Column, String, Text
+from sqlalchemy import Column, String, Text, DateTime
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql import func
 import uuid
 from app.core.database import Base
 
@@ -16,3 +17,4 @@ class Hotel(Base):
     logo_url = Column(Text)
     website = Column(String(255))
     status = Column(String(50), default="Active")
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

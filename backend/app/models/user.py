@@ -1,6 +1,7 @@
 from sqlalchemy import Column, String, Boolean, ForeignKey, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 import uuid
 from app.core.database import Base
 
@@ -20,6 +21,7 @@ class User(Base):
     verification_token_expires = Column(DateTime(timezone=True))
     reset_token = Column(String(255))
     reset_token_expires = Column(DateTime(timezone=True))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     hotel = relationship("Hotel", backref="users")
     role = relationship("Role", backref="users")
