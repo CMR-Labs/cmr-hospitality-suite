@@ -39,3 +39,19 @@ async def forgot_password_route(data: ForgotPasswordRequest, db: AsyncSession = 
 @router.post("/reset-password")
 async def reset_password_route(data: ResetPasswordRequest, db: AsyncSession = Depends(get_db)):
     return await reset_password(db, data.token, data.new_password)
+
+@router.get("/me/role")
+async def get_my_role(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    from app.models.role import Role
+    from sqlalchemy import select
+    if not current_user.role_id:
+        return {"role": "Hotel Owner", "permissions": ["all"]}
+    result = await db.execute(select(Role).where(Role.id == current_user.role_id))
+    role = result.scalar_one_or_none()
+    role_name = role.name if role else "Hotel Owner"
+    from app.core.rbac import ROLE_PERMISSIONS, ROLE_SIDEBAR_ACCESS
+    return {
+        "role": role_name,
+        "permissions": ROLE_PERMISSIONS.get(role_name, []),
+        "sidebar_access": ROLE_SIDEBAR_ACCESS.get(role_name, []),
+    }

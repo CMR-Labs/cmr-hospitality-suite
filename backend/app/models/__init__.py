@@ -8,3 +8,4 @@ from app.models.payment import Payment
 from app.models.staff import Staff
 from app.models.housekeeping import HousekeepingTask
 from app.models.event import EventHall, EventBooking
+from app.models.permission import Permission, RolePermission

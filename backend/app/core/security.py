@@ -6,7 +6,9 @@ from sqlalchemy import select
 from app.core.config import settings
 from app.core.database import get_db
 from app.models.user import User
+from app.models.permission import Permission, RolePermission
 from uuid import UUID
+from typing import List
 
 bearer_scheme = HTTPBearer()
 
@@ -35,3 +37,26 @@ async def get_current_hotel_id(current_user: User = Depends(get_current_user)) -
     if not current_user.hotel_id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No hotel associated with this account")
     return current_user.hotel_id
+
+async def get_user_permissions(user: User, db: AsyncSession) -> List[str]:
+    if not user.role_id:
+        return []
+    result = await db.execute(
+        select(Permission.name)
+        .join(RolePermission, RolePermission.permission_id == Permission.id)
+        .where(RolePermission.role_id == user.role_id)
+    )
+    return [row[0] for row in result.fetchall()]
+
+def require_permission(permission: str):
+    async def permission_checker(
+        current_user: User = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db),
+    ):
+        if not current_user.role_id:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f"Permission denied: {permission}")
+        permissions = await get_user_permissions(current_user, db)
+        if permission not in permissions:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f"Permission denied: {permission}")
+        return current_user
+    return permission_checker
