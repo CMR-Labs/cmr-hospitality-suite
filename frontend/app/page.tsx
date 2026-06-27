@@ -1,157 +1,162 @@
-"use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { api } from "@/lib/api";
-import DashboardSidebar from "../components/DashboardSidebar";
 
-type Summary = {
-  rooms: { total: number; available: number; occupied: number; occupancy_rate: string };
-  guests: { total: number };
-  reservations: { total: number; confirmed: number; checked_in: number };
-  revenue: { total: number };
-  housekeeping: { pending_tasks: number };
-};
+const features = [
+  { title: "Smart Booking", desc: "Manage reservations, room availability, and booking confirmations from one unified dashboard." },
+  { title: "AI Concierge", desc: "Intelligent assistant that handles guest inquiries, recommendations, and support automatically." },
+  { title: "Guest Management", desc: "Complete guest profiles, history, preferences, and communication in one place." },
+  { title: "Room Management", desc: "Track room status, housekeeping, maintenance, and availability in real time." },
+  { title: "Analytics & Reports", desc: "Real-time operational insights, occupancy rates, revenue tracking, and performance metrics." },
+  { title: "Event Management", desc: "Manage event halls, corporate bookings, catering coordination, and scheduling." },
+  { title: "Payments", desc: "Seamless payment processing with Paystack and Flutterwave for Nigerian and African markets." },
+  { title: "Workflow Automation", desc: "Automate repetitive tasks — check-in reminders, housekeeping schedules, and guest communications." },
+];
 
-export default function Dashboard() {
-  const router = useRouter();
-  const [summary, setSummary] = useState<Summary | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<{ full_name: string; email: string } | null>(null);
+const steps = [
+  { number: "01", title: "Set up your hotel", desc: "Add your rooms, rates, event halls, and team members in minutes." },
+  { number: "02", title: "Manage reservations", desc: "Accept bookings, assign rooms, and track guest arrivals from your dashboard." },
+  { number: "03", title: "Automate operations", desc: "Let CMR handle reminders, housekeeping schedules, and guest communications." },
+  { number: "04", title: "Grow with insights", desc: "Use real-time analytics to make better decisions and increase revenue." },
+];
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) { router.push("/login"); return; }
-    const userData = localStorage.getItem("user");
-    if (userData) setUser(JSON.parse(userData));
-    fetchSummary();
-  }, []);
+const audiences = ["Hotels", "Resorts", "Guest Houses", "Boutique Hotels", "Serviced Apartments", "Event Centers"];
 
-  const fetchSummary = async () => {
-    try {
-      const data = await api.get("/api/v1/analytics/summary");
-      setSummary(data);
-    } catch {
-      router.push("/login");
-    } finally {
-      setLoading(false);
-    }
-  };
+const reasons = [
+  { title: "AI-Powered", desc: "Built with intelligent automation at its core — not as an afterthought." },
+  { title: "Built for Africa", desc: "Designed with Nigerian and African hospitality operations in mind." },
+  { title: "Secure & Scalable", desc: "Enterprise-grade architecture that grows with your business." },
+  { title: "Multi-Tenant Ready", desc: "Manage multiple properties from a single unified platform." },
+];
 
-  const kpis = summary ? [
-    { label: "Occupancy Rate", value: summary.rooms.occupancy_rate, sub: `${summary.rooms.occupied} of ${summary.rooms.total} rooms` },
-    { label: "Active Reservations", value: summary.reservations.confirmed, sub: `${summary.reservations.checked_in} checked in` },
-    { label: "Total Guests", value: summary.guests.total, sub: "Registered guests" },
-    { label: "Total Revenue", value: `₦${summary.revenue.total.toLocaleString()}`, sub: "Successful payments" },
-  ] : [
-    { label: "Occupancy Rate", value: "—", sub: "Loading..." },
-    { label: "Active Reservations", value: "—", sub: "Loading..." },
-    { label: "Total Guests", value: "—", sub: "Loading..." },
-    { label: "Total Revenue", value: "—", sub: "Loading..." },
-  ];
-
-  const roomStats = summary ? [
-    { label: "Available", count: summary.rooms.available, color: "#15803d" },
-    { label: "Occupied", count: summary.rooms.occupied, color: "#1B2D5B" },
-    { label: "Total", count: summary.rooms.total, color: "#B8952A" },
-    { label: "HK Pending", count: summary.housekeeping.pending_tasks, color: "#dc2626" },
-  ] : [];
-
-  const quickActions = [
-    { label: "New Reservation", href: "/dashboard/reservations" },
-    { label: "Add Guest", href: "/dashboard/guests" },
-    { label: "Add Room", href: "/dashboard/rooms" },
-    { label: "Book Event Hall", href: "/dashboard/event-halls" },
-    { label: "Record Payment", href: "/dashboard/payments" },
-    { label: "Generate Report", href: "/dashboard/reports" },
-  ];
-
+export default function Home() {
   return (
-    <div style={{ display: "flex", minHeight: "100vh", fontFamily: "'Inter', sans-serif", backgroundColor: "#F4F5F7" }}>
-      <DashboardSidebar active="Dashboard" />
-
-      <main style={{ marginLeft: "220px", flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-        <header style={{ backgroundColor: "white", borderBottom: "1px solid #E5E7EB", padding: "0 28px", height: "60px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 10 }}>
-          <div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", fontWeight: 700, color: "#1B2D5B", margin: 0 }}>Dashboard</h1>
-            <p style={{ color: "#9CA3AF", fontSize: "11px", margin: 0 }}>Live hotel operations overview</p>
-          </div>
+    <main style={{ fontFamily: "'Inter', sans-serif", margin: 0, padding: 0 }}>
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, backgroundColor: "#1B2D5B", borderBottom: "1px solid #243d75" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 48px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "72px" }}>
+          <img src="/cmr-hospitality-logo.jpeg" alt="CMR Hospitality Suite" style={{ height: "44px", width: "auto" }} />
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Link href="/dashboard/reservations" style={{ backgroundColor: "#B8952A", color: "white", padding: "8px 18px", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>+ New Reservation</Link>
-            <div style={{ width: "34px", height: "34px", backgroundColor: "#1B2D5B", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: "12px", fontWeight: 700 }}>
-              {user?.full_name?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "HM"}
-            </div>
+            <Link href="/login" style={{ color: "#94a3b8", fontSize: "14px", textDecoration: "none", padding: "8px 16px" }}>Sign In</Link>
+            <Link href="/register" style={{ backgroundColor: "#B8952A", color: "white", padding: "10px 24px", fontSize: "14px", fontWeight: 600, textDecoration: "none" }}>Get Started</Link>
           </div>
-        </header>
-
-        <div style={{ padding: "28px", flex: 1 }}>
-          {loading ? (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "200px" }}>
-              <p style={{ color: "#9CA3AF", fontSize: "14px" }}>Loading live data...</p>
-            </div>
-          ) : (
-            <>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "24px" }}>
-                {kpis.map((k) => (
-                  <div key={k.label} style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "20px 24px" }}>
-                    <p style={{ color: "#9CA3AF", fontSize: "11px", margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "0.06em" }}>{k.label}</p>
-                    <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "26px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 4px" }}>{k.value}</p>
-                    <p style={{ fontSize: "11px", margin: 0, color: "#9CA3AF" }}>{k.sub}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "24px" }}>
-                <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "20px 24px" }}>
-                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "14px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Room Status</h2>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                    {roomStats.map((r) => (
-                      <div key={r.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                          <div style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: r.color }} />
-                          <span style={{ fontSize: "13px", color: "#374151" }}>{r.label}</span>
-                        </div>
-                        <span style={{ fontSize: "16px", fontWeight: 700, color: r.color, fontFamily: "'Playfair Display', serif" }}>{r.count}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ marginTop: "16px", borderTop: "1px solid #F3F4F6", paddingTop: "12px" }}>
-                    <Link href="/dashboard/rooms" style={{ color: "#B8952A", fontSize: "12px", textDecoration: "none" }}>Manage rooms →</Link>
-                  </div>
-                </div>
-
-                <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "20px 24px" }}>
-                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "14px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Quick Actions</h2>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    {quickActions.map((a) => (
-                      <Link key={a.label} href={a.href} style={{ display: "block", padding: "10px 14px", border: "1px solid #E5E7EB", fontSize: "13px", color: "#1B2D5B", textDecoration: "none", fontWeight: 500 }}>
-                        {a.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "20px 24px" }}>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "14px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Operations Summary</h2>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }}>
-                  {[
-                    { label: "Total Rooms", value: summary?.rooms.total || 0 },
-                    { label: "Total Reservations", value: summary?.reservations.total || 0 },
-                    { label: "Checked In", value: summary?.reservations.checked_in || 0 },
-                    { label: "HK Tasks Pending", value: summary?.housekeeping.pending_tasks || 0 },
-                  ].map((s) => (
-                    <div key={s.label} style={{ textAlign: "center", padding: "16px", backgroundColor: "#F9FAFB", border: "1px solid #F3F4F6" }}>
-                      <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "24px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 4px" }}>{s.value}</p>
-                      <p style={{ fontSize: "11px", color: "#9CA3AF", margin: 0, textTransform: "uppercase", letterSpacing: "0.05em" }}>{s.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
         </div>
-      </main>
-    </div>
+      </nav>
+
+      <section style={{ backgroundColor: "#1B2D5B", paddingTop: "140px", paddingBottom: "100px", paddingLeft: "48px", paddingRight: "48px" }}>
+        <div style={{ maxWidth: "900px", margin: "0 auto", textAlign: "center" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "10px", backgroundColor: "#243d75", padding: "8px 16px", marginBottom: "32px" }}>
+            <img src="/cmr-group-logo.jpeg" alt="CMR Group" style={{ height: "20px", width: "auto" }} />
+            <span style={{ color: "#94a3b8", fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase" }}>Product of CMR Group</span>
+          </div>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "56px", fontWeight: 700, color: "white", lineHeight: 1.15, margin: "0 0 24px" }}>
+            Run Your Hotel on<br /><span style={{ color: "#B8952A" }}>Intelligent Digital Infrastructure</span>
+          </h1>
+          <p style={{ color: "#94a3b8", fontSize: "18px", lineHeight: 1.8, maxWidth: "680px", margin: "0 auto 40px" }}>
+            CMR Hospitality Suite is an AI-powered operations platform that helps hotels, resorts, and hospitality businesses streamline reservations, manage guests, automate workflows, and gain real-time operational insights from a single unified system.
+          </p>
+          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/register" style={{ backgroundColor: "#B8952A", color: "white", padding: "16px 40px", fontSize: "15px", fontWeight: 600, textDecoration: "none" }}>Get Started Free</Link>
+            <Link href="/demo" style={{ border: "1px solid #94a3b8", color: "#94a3b8", padding: "16px 40px", fontSize: "15px", textDecoration: "none" }}>Book a Demo</Link>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ backgroundColor: "#F9F7F4", padding: "96px 48px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "64px" }}>
+            <p style={{ color: "#B8952A", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 600, marginBottom: "12px" }}>Features</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "40px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Everything your hotel needs</h2>
+            <div style={{ height: "2px", width: "48px", backgroundColor: "#B8952A", margin: "0 auto" }} />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px" }}>
+            {features.map((f) => (
+              <div key={f.title} style={{ backgroundColor: "white", border: "1px solid #e5e0d8", padding: "32px" }}>
+                <div style={{ width: "48px", height: "48px", backgroundColor: "#1B2D5B", marginBottom: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ color: "#B8952A", fontSize: "22px", fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>{f.title[0]}</span>
+                </div>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "17px", fontWeight: 600, color: "#1B2D5B", margin: "0 0 10px" }}>{f.title}</h3>
+                <p style={{ color: "#6B7280", fontSize: "14px", lineHeight: 1.7, margin: 0 }}>{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ backgroundColor: "#1B2D5B", padding: "96px 48px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "64px" }}>
+            <p style={{ color: "#B8952A", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 600, marginBottom: "12px" }}>How It Works</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "40px", fontWeight: 700, color: "white", margin: "0 0 16px" }}>Up and running in minutes</h2>
+            <div style={{ height: "2px", width: "48px", backgroundColor: "#B8952A", margin: "0 auto" }} />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "40px" }}>
+            {steps.map((step) => (
+              <div key={step.number} style={{ textAlign: "center" }}>
+                <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "48px", fontWeight: 700, color: "#B8952A", margin: "0 0 16px" }}>{step.number}</p>
+                <h3 style={{ fontSize: "17px", fontWeight: 600, color: "white", margin: "0 0 10px" }}>{step.title}</h3>
+                <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: 1.7, margin: 0 }}>{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ backgroundColor: "#F9F7F4", padding: "96px 48px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "48px" }}>
+            <p style={{ color: "#B8952A", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 600, marginBottom: "12px" }}>Who It's For</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "40px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Built for every hospitality business</h2>
+            <div style={{ height: "2px", width: "48px", backgroundColor: "#B8952A", margin: "0 auto" }} />
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "16px" }}>
+            {audiences.map((a) => (
+              <span key={a} style={{ border: "1px solid #1B2D5B", color: "#1B2D5B", padding: "12px 28px", fontSize: "14px", fontWeight: 500 }}>{a}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ backgroundColor: "white", padding: "96px 48px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "64px" }}>
+            <p style={{ color: "#B8952A", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase", fontWeight: 600, marginBottom: "12px" }}>Why CMR</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "40px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Built different</h2>
+            <div style={{ height: "2px", width: "48px", backgroundColor: "#B8952A", margin: "0 auto" }} />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "24px" }}>
+            {reasons.map((r) => (
+              <div key={r.title} style={{ borderTop: "3px solid #B8952A", padding: "32px 24px" }}>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "17px", fontWeight: 600, color: "#1B2D5B", margin: "0 0 12px" }}>{r.title}</h3>
+                <p style={{ color: "#6B7280", fontSize: "14px", lineHeight: 1.7, margin: 0 }}>{r.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ backgroundColor: "#1B2D5B", padding: "96px 48px" }}>
+        <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center" }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "40px", fontWeight: 700, color: "white", margin: "0 0 20px", lineHeight: 1.3 }}>
+            Transform your hospitality operations
+          </h2>
+          <p style={{ color: "#94a3b8", fontSize: "16px", lineHeight: 1.8, margin: "0 0 40px" }}>
+            Join forward-thinking hotels and hospitality businesses building smarter operations on intelligent digital infrastructure.
+          </p>
+          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/register" style={{ backgroundColor: "#B8952A", color: "white", padding: "16px 40px", fontSize: "15px", fontWeight: 600, textDecoration: "none" }}>Get Started Free</Link>
+            <Link href="/demo" style={{ border: "1px solid #94a3b8", color: "#94a3b8", padding: "16px 40px", fontSize: "15px", textDecoration: "none" }}>Book a Demo</Link>
+          </div>
+        </div>
+      </section>
+
+      <footer style={{ backgroundColor: "#0F1E3D", borderTop: "1px solid #243d75", padding: "40px 48px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+          <img src="/cmr-hospitality-logo.jpeg" alt="CMR Hospitality Suite" style={{ height: "36px", width: "auto" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <img src="/cmr-group-logo.jpeg" alt="CMR Group" style={{ height: "16px", width: "auto" }} />
+            <span style={{ color: "#4B5563", fontSize: "12px" }}>A product of CMR Group</span>
+          </div>
+          <p style={{ color: "#4B5563", fontSize: "12px", margin: 0 }}>© 2021-2026 CMR Group · All rights reserved</p>
+        </div>
+      </footer>
+    </main>
   );
 }
