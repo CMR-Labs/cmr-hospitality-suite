@@ -9,3 +9,4 @@ from app.models.staff import Staff
 from app.models.housekeeping import HousekeepingTask
 from app.models.event import EventHall, EventBooking
 from app.models.permission import Permission, RolePermission
+from app.models.audit import AuditLog
