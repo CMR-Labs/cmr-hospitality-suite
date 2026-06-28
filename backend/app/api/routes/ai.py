@@ -16,6 +16,12 @@ from typing import List
 from uuid import UUID
 import anthropic
 
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from fastapi import Request
+
+limiter = Limiter(key_func=get_remote_address)
+
 router = APIRouter(prefix="/ai", tags=["AI Concierge"])
 
 class Message(BaseModel):
