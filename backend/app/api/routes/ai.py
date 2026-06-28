@@ -95,6 +95,7 @@ STAFF:
     return context
 
 @router.post("/chat")
+@limiter.limit("5/minute")
 async def chat(
     request: ChatRequest,
     db: AsyncSession = Depends(get_db),
