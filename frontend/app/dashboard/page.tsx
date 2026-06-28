@@ -29,6 +29,8 @@ export default function Dashboard() {
     if (!token) { router.push("/login"); return; }
     const userData = localStorage.getItem("user");
     if (userData) setUser(JSON.parse(userData));
+    // Wake up backend
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://cmr-hospitality-suite.onrender.com"}/health`).catch(() => {});
     fetchSummary();
   }, []);
 
