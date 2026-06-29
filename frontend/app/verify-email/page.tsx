@@ -25,7 +25,7 @@ function VerifyEmailForm() {
       await api.post("/api/v1/auth/verify-email", { token });
       setStatus("success");
       setMessage("Your email has been verified successfully!");
-      setTimeout(() => router.push("/login"), 3000);
+      setTimeout(() => router.push("/onboarding"), 3000);
     } catch (err: unknown) {
       setStatus("error");
       setMessage(err instanceof Error ? err.message : "Verification failed. The link may have expired.");
