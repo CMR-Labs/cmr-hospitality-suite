@@ -11,6 +11,7 @@ from jose import jwt
 from datetime import datetime, timedelta
 from fastapi import HTTPException, status
 import secrets
+from app.services.subscription import create_trial_subscription
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -53,6 +54,10 @@ async def register_hotel(db: AsyncSession, data: HotelRegisterRequest):
         verification_token_expires=verification_expires,
     )
     db.add(user)
+    await db.flush()
+
+    await create_trial_subscription(db, hotel.id, "starter")
+
     await db.commit()
     await db.refresh(user)
 
