@@ -14,6 +14,7 @@ from app.api.routes.admin import router as admin_router
 from app.api.routes.roles import router as roles_router
 from app.api.routes.audit import router as audit_router
 from app.api.routes.subscription import router as subscription_router
+from app.api.routes.settings import router as settings_router
 
 api_router = APIRouter(prefix="/api/v1")
 api_router.include_router(auth_router)
@@ -31,3 +32,4 @@ api_router.include_router(admin_router)
 api_router.include_router(roles_router)
 api_router.include_router(audit_router)
 api_router.include_router(subscription_router)
+api_router.include_router(settings_router)
