@@ -141,6 +141,7 @@ export default function Settings() {
                   <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 8px" }}>Billing & Subscription</h2>
                   <p style={{ color: "#6B7280", fontSize: "13px", margin: "0 0 24px" }}>Manage your CMR Hospitality Suite subscription.</p>
 
+                  {/* Current Plan */}
                   <div style={{ border: "1px solid #E5E7EB", padding: "20px", marginBottom: "32px", backgroundColor: "#F9F7F4" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div>
@@ -150,8 +151,12 @@ export default function Settings() {
                       </div>
                       <span style={{ backgroundColor: "#F0FDF4", color: "#15803d", padding: "4px 10px", fontSize: "11px", fontWeight: 600 }}>Active</span>
                     </div>
+                    <Link href="/dashboard/subscription" style={{ display: "inline-block", marginTop: "12px", color: "#B8952A", fontSize: "12px", fontWeight: 600, textDecoration: "none" }}>
+                      View subscription details →
+                    </Link>
                   </div>
 
+                  {/* Plans Grid */}
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "32px" }}>
                     {[
                       {
@@ -167,7 +172,7 @@ export default function Settings() {
                         current: false, popular: true,
                       },
                       {
-                        plan: "Professional Elite", price: "₦573,901+", period: "/month",
+                        plan: "Professional Elite", price: "₦573,901+", period: "/month", annual: "",
                         desc: "Ideal for hotel groups, resorts, and multi-property operators.",
                         features: ["Upload 5 Hotels", "73+ Rooms", "5 Event Centers", "Club, Gym, Pool & Bar Mgmt", "AI Concierge (unlimited)", "Advanced Analytics", "Custom Dashboard plus live update", "23 Staff Accounts", "7 Manager Accounts", "High-Priority Support"],
                         current: false, popular: false,
@@ -199,6 +204,7 @@ export default function Settings() {
                     ))}
                   </div>
 
+                  {/* Add-ons */}
                   <div style={{ marginBottom: "32px" }}>
                     <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "14px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Optional Add-Ons</h3>
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -217,6 +223,7 @@ export default function Settings() {
                     </div>
                   </div>
 
+                  {/* Website Package */}
                   <div style={{ border: "1px solid #E5E7EB", padding: "20px", backgroundColor: "#F9F7F4", marginBottom: "32px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
                       <div>
@@ -234,6 +241,7 @@ export default function Settings() {
                     <button style={{ backgroundColor: "#1B2D5B", color: "white", padding: "10px 20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer" }}>Request Quote</button>
                   </div>
 
+                  {/* Why CMR */}
                   <div style={{ padding: "20px", border: "1px solid #E5E7EB" }}>
                     <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "14px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 16px" }}>Why Hotels Choose CMR Hospitality Suite</h3>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "8px" }}>
