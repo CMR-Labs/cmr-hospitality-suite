@@ -29,6 +29,101 @@ export default function Settings() {
 
   const tabs = ["profile", "hotel", "billing", "security", "integrations"];
 
+  const plans = [
+    {
+      plan: "Starter",
+      price: "₦31,083",
+      period: "/month",
+      annual: "₦331,970/year",
+      desc: "Ideal for small hotels, lodges, and guest houses.",
+      features: [
+        "1 Hotel",
+        "Up to 11 Rooms",
+        "Reservations Management",
+        "Guest Management",
+        "Payments Management",
+        "Basic Analytics",
+        "1 Manager Account",
+        "Email Support",
+        "Available on Mobile App",
+        "✗ No Room Photo Uploads",
+        "✗ No AI Concierge",
+        "✗ No Event Center Management",
+      ],
+      current: true,
+      popular: false,
+      enterprise: false,
+    },
+    {
+      plan: "Professional",
+      price: "₦161,250",
+      period: "/month",
+      annual: "₦1,722,150/year — 11% off",
+      desc: "Ideal for growing hotels requiring automation and analytics.",
+      features: [
+        "Up to 2 Hotels",
+        "Up to 25 Rooms",
+        "1 Event Center",
+        "AI Concierge",
+        "Advanced Analytics",
+        "6 Staff Accounts",
+        "1 Manager Account",
+        "Email Notifications",
+        "Enhanced Reporting",
+        "Priority Support",
+      ],
+      current: false,
+      popular: true,
+      enterprise: false,
+    },
+    {
+      plan: "Professional Elite",
+      price: "₦573,901+",
+      period: "/month",
+      annual: "",
+      desc: "Ideal for hotel groups, resorts, and multi-property operators.",
+      features: [
+        "Up to 5 Hotels",
+        "Up to 73+ Rooms",
+        "Up to 5 Event Centers",
+        "Club, Gym, Pool & Bar Mgmt",
+        "AI Concierge (unlimited)",
+        "Advanced Analytics",
+        "Custom Dashboard",
+        "23 Staff Accounts",
+        "7 Manager Accounts",
+        "High-Priority Support",
+      ],
+      current: false,
+      popular: false,
+      enterprise: false,
+    },
+    {
+      plan: "Enterprise",
+      price: "",
+      period: "",
+      annual: "",
+      desc: "For hotel chains, luxury resorts, and institutional hospitality.",
+      features: [
+        "Unlimited Hotels & Rooms",
+        "Unlimited Event Centers",
+        "Dedicated Infrastructure",
+        "White-Label Options",
+        "Custom Integrations & API",
+        "Unlimited Staff & Managers",
+        "Advanced Reporting",
+        "Dedicated Account Manager",
+        "SLA Coverage",
+        "Data Migration Assistance",
+        "4 Months Implementation",
+        "Go-Live Support",
+      ],
+      current: false,
+      popular: false,
+      enterprise: true,
+    },
+  ];
+
   return (
     <div style={{ display: "flex", minHeight: "100vh", fontFamily: "'Inter', sans-serif", backgroundColor: "#F4F5F7" }}>
       <aside style={{ width: "220px", backgroundColor: "#1B2D5B", display: "flex", flexDirection: "column", position: "fixed", top: 0, left: 0, bottom: 0, zIndex: 20 }}>
@@ -147,7 +242,7 @@ export default function Settings() {
                       <div>
                         <p style={{ fontSize: "14px", fontWeight: 600, color: "#1B2D5B", margin: "0 0 4px" }}>Starter Plan</p>
                         <p style={{ fontSize: "12px", color: "#6B7280", margin: "0 0 4px" }}>₦31,083/month · Currently active — beta period</p>
-                        <p style={{ fontSize: "11px", color: "#9CA3AF", margin: 0 }}>1 Hotel · Up to 7 Rooms · Basic Analytics · 1 Manager Account</p>
+                        <p style={{ fontSize: "11px", color: "#9CA3AF", margin: 0 }}>1 Hotel · Up to 11 Rooms · Basic Analytics · 1 Manager Account</p>
                       </div>
                       <span style={{ backgroundColor: "#F0FDF4", color: "#15803d", padding: "4px 10px", fontSize: "11px", fontWeight: 600 }}>Active</span>
                     </div>
@@ -158,37 +253,24 @@ export default function Settings() {
 
                   {/* Plans Grid */}
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "32px" }}>
-                    {[
-                      {
-                        plan: "Starter", price: "₦31,083", period: "/month", annual: "₦331,970/year",
-                        desc: "Ideal for small hotels, lodges, and guest houses.",
-                        features: ["Upload 1 Hotel", "11 Rooms", "Reservations Management", "Guest Management", "Payments Management", "Basic Analytics", "1 Manager Account", "Email Support", "Available on Mobile App", "✗ No Room Photo Uploads", "✗ No AI Concierge", "✗ No Event Center Management"],
-                        current: true, popular: false,
-                      },
-                      {
-                        plan: "Professional", price: "₦161,250", period: "/month", annual: "₦1,722,150/year — 11% off",
-                        desc: "Ideal for growing hotels requiring automation and analytics.",
-                        features: ["Upload to 2 Hotels", "25 Rooms", "1 Event Center", "AI Concierge", "Advanced Analytics", "6 Staff Accounts", "1 Manager Account", "Email Notifications", "Enhanced Reporting", "Priority Support"],
-                        current: false, popular: true,
-                      },
-                      {
-                        plan: "Professional Elite", price: "₦573,901+", period: "/month", annual: "",
-                        desc: "Ideal for hotel groups, resorts, and multi-property operators.",
-                        features: ["Upload 5 Hotels", "73+ Rooms", "5 Event Centers", "Club, Gym, Pool & Bar Mgmt", "AI Concierge (unlimited)", "Advanced Analytics", "Custom Dashboard plus live update", "23 Staff Accounts", "7 Manager Accounts", "High-Priority Support"],
-                        current: false, popular: false,
-                      },
-                      {
-                        plan: "Enterprise", price: "₦13M+", period: "", annual: "Custom pricing — contact sales",
-                        desc: "For hotel chains, luxury resorts, and institutional hospitality.",
-                        features: ["Unlimited Hotels & Rooms", "Unlimited Event Centers", "Dedicated Infrastructure", "White-Label Options", "Custom Integrations & API", "Unlimited Staff & Managers", "Advanced Reporting", "Dedicated Account Manager", "SLA Coverage", "Data Migration Assistance", "4 Months Implementation", "Go-Live Support"],
-                        current: false, popular: false,
-                      },
-                    ].map((p) => (
+                    {plans.map((p) => (
                       <div key={p.plan} style={{ border: p.popular ? "2px solid #1B2D5B" : "1px solid #E5E7EB", padding: "20px", display: "flex", flexDirection: "column" }}>
-                        {p.popular && <p style={{ fontSize: "10px", color: "#B8952A", fontWeight: 700, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>⭐ Most Popular</p>}
+                        {p.popular && (
+                          <p style={{ fontSize: "10px", color: "#B8952A", fontWeight: 700, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>⭐ Most Popular</p>
+                        )}
                         <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "17px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 4px" }}>{p.plan}</p>
-                        <p style={{ fontSize: "22px", fontWeight: 700, color: "#B8952A", margin: "0 0 2px" }}>{p.price}<span style={{ fontSize: "12px", fontWeight: 400, color: "#6B7280" }}>{p.period}</span></p>
-                        <p style={{ fontSize: "11px", color: "#9CA3AF", margin: "0 0 8px" }}>{p.annual}</p>
+                        {p.enterprise ? (
+                          <p style={{ fontSize: "15px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 4px" }}>Contact us for pricing</p>
+                        ) : (
+                          <p style={{ fontSize: "22px", fontWeight: 700, color: "#B8952A", margin: "0 0 2px" }}>
+                            {p.price}<span style={{ fontSize: "12px", fontWeight: 400, color: "#6B7280" }}>{p.period}</span>
+                          </p>
+                        )}
+                        {p.annual ? (
+                          <p style={{ fontSize: "11px", color: "#9CA3AF", margin: "0 0 8px" }}>{p.annual}</p>
+                        ) : (
+                          <div style={{ marginBottom: "8px" }} />
+                        )}
                         <p style={{ fontSize: "12px", color: "#6B7280", margin: "0 0 16px", lineHeight: 1.5 }}>{p.desc}</p>
                         <div style={{ display: "flex", flexDirection: "column", gap: "5px", marginBottom: "20px", flex: 1 }}>
                           {p.features.map(f => (
@@ -198,7 +280,7 @@ export default function Settings() {
                           ))}
                         </div>
                         <button style={{ width: "100%", backgroundColor: p.current ? "#F3F4F6" : p.popular ? "#1B2D5B" : "white", color: p.current ? "#9CA3AF" : p.popular ? "white" : "#1B2D5B", padding: "10px", fontSize: "12px", fontWeight: 600, border: p.current ? "1px solid #E5E7EB" : "1px solid #1B2D5B", cursor: p.current ? "not-allowed" : "pointer" }}>
-                          {p.current ? "Current Plan" : p.plan === "Enterprise" ? "Contact Sales" : "Upgrade"}
+                          {p.current ? "Current Plan" : p.enterprise ? "Contact Sales" : "Upgrade"}
                         </button>
                       </div>
                     ))}
