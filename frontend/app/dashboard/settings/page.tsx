@@ -11,7 +11,12 @@ const navItems = [
 ];
 
 type Profile = { full_name: string; email: string; phone: string; email_verified: boolean };
-type HotelData = { name: string; email: string; phone: string; address: string; city: string; country: string; website: string };
+type HotelData = {
+  name: string; email: string; phone: string; address: string;
+  city: string; country: string; website: string; logo_url?: string;
+};
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://cmr-hospitality-suite.onrender.com";
 
 const plans = [
   {
@@ -47,9 +52,10 @@ export default function Settings() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [profile, setProfile] = useState<Profile>({ full_name: "", email: "", phone: "", email_verified: false });
-  const [hotel, setHotel] = useState<HotelData>({ name: "", email: "", phone: "", address: "", city: "", country: "Nigeria", website: "" });
+  const [hotel, setHotel] = useState<HotelData>({ name: "", email: "", phone: "", address: "", city: "", country: "Nigeria", website: "", logo_url: "" });
   const [passwords, setPasswords] = useState({ current_password: "", new_password: "", confirm_password: "" });
   const [loading, setLoading] = useState(true);
+  const [logoUploading, setLogoUploading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -99,13 +105,48 @@ export default function Settings() {
     setSaving(true);
     setError("");
     try {
-      await api.patch("/api/v1/settings/hotel", hotel);
+      await api.patch("/api/v1/settings/hotel", {
+        name: hotel.name,
+        email: hotel.email,
+        phone: hotel.phone,
+        address: hotel.address,
+        city: hotel.city,
+        country: hotel.country,
+        website: hotel.website,
+      });
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to save");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleLogoUpload = async (file: File) => {
+    setLogoUploading(true);
+    setError("");
+    const formData = new FormData();
+    formData.append("file", file);
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch(`${API_URL}/api/v1/uploads/hotel-logo`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok && data.logo_url) {
+        setHotel({ ...hotel, logo_url: data.logo_url });
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      } else {
+        setError(data.detail || "Failed to upload logo");
+      }
+    } catch {
+      setError("Failed to upload logo");
+    } finally {
+      setLogoUploading(false);
     }
   };
 
@@ -209,6 +250,32 @@ export default function Settings() {
                   <div style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "28px" }}>
                     <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", fontWeight: 700, color: "#1B2D5B", margin: "0 0 24px" }}>Hotel Settings</h2>
                     <div style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "480px" }}>
+
+                      {/* Hotel Logo Upload */}
+                      <div>
+                        <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "#1B2D5B", marginBottom: "6px" }}>Hotel Logo</label>
+                        {hotel.logo_url && (
+                          <div style={{ marginBottom: "10px" }}>
+                            <img src={hotel.logo_url} alt="Hotel Logo" style={{ height: "64px", width: "auto", border: "1px solid #E5E7EB", padding: "4px", objectFit: "contain" }} />
+                          </div>
+                        )}
+                        <label style={{ display: "inline-block", backgroundColor: hotel.logo_url ? "white" : "#1B2D5B", color: hotel.logo_url ? "#1B2D5B" : "white", border: "1px solid #1B2D5B", padding: "8px 16px", fontSize: "12px", fontWeight: 600, cursor: logoUploading ? "not-allowed" : "pointer" }}>
+                          {logoUploading ? "Uploading..." : hotel.logo_url ? "Change Logo" : "Upload Logo"}
+                          <input
+                            type="file"
+                            accept="image/jpeg,image/jpg,image/png,image/webp"
+                            style={{ display: "none" }}
+                            disabled={logoUploading}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleLogoUpload(file);
+                            }}
+                          />
+                        </label>
+                        <p style={{ fontSize: "11px", color: "#9CA3AF", margin: "6px 0 0" }}>JPG, PNG or WebP · Max 5MB · Recommended: 400×400px</p>
+                      </div>
+
+                      {/* Hotel Fields */}
                       {[
                         { label: "Hotel Name", key: "name", placeholder: "e.g. Parkview Hotel Abuja" },
                         { label: "Hotel Email", key: "email", placeholder: "hotel@email.com" },

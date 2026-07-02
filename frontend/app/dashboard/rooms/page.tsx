@@ -11,6 +11,7 @@ type Room = {
   status: string;
   notes: string;
   room_type_id: string;
+  photos: string[];
 };
 
 type RoomType = {
@@ -38,6 +39,8 @@ const navItems = [
   "Notifications", "Reports", "Staff", "Settings",
 ];
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://cmr-hospitality-suite.onrender.com";
+
 export default function Rooms() {
   const router = useRouter();
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -50,6 +53,7 @@ export default function Rooms() {
   const [newRoom, setNewRoom] = useState({ room_number: "", floor: "", status: "Available", notes: "", room_type_id: "" });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [uploadingRoomId, setUploadingRoomId] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -97,6 +101,37 @@ export default function Rooms() {
   const handleStatusUpdate = async (roomId: string, status: string) => {
     try {
       await api.patch(`/api/v1/rooms/${roomId}`, { status });
+      fetchData();
+    } catch { }
+  };
+
+  const handlePhotoUpload = async (roomId: string, file: File) => {
+    setUploadingRoomId(roomId);
+    const formData = new FormData();
+    formData.append("file", file);
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch(`${API_URL}/api/v1/uploads/room-photo/${roomId}`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok) {
+        fetchData();
+      } else {
+        alert(data.detail || "Upload failed");
+      }
+    } catch {
+      alert("Upload failed");
+    } finally {
+      setUploadingRoomId(null);
+    }
+  };
+
+  const handlePhotoDelete = async (roomId: string, photoUrl: string) => {
+    try {
+      await api.delete(`/api/v1/uploads/room-photo/${roomId}?photo_url=${encodeURIComponent(photoUrl)}`);
       fetchData();
     } catch { }
   };
@@ -229,9 +264,10 @@ export default function Rooms() {
               <button onClick={() => setShowAddRoom(true)} style={{ backgroundColor: "#B8952A", color: "white", padding: "10px 24px", fontSize: "13px", fontWeight: 600, border: "none", cursor: "pointer" }}>+ Add Room</button>
             </div>
           ) : view === "grid" ? (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "16px" }}>
               {filtered.map((room) => {
                 const rt = getRoomType(room.room_type_id);
+                const photos = room.photos || [];
                 return (
                   <div key={room.id} style={{ backgroundColor: "white", border: "1px solid #E5E7EB", padding: "20px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
@@ -241,6 +277,7 @@ export default function Rooms() {
                       </div>
                       <span style={{ backgroundColor: statusBg[room.status], color: statusColor[room.status], padding: "4px 8px", fontSize: "10px", fontWeight: 600 }}>{room.status}</span>
                     </div>
+
                     {rt && (
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "12px" }}>
                         <div>
@@ -253,7 +290,42 @@ export default function Rooms() {
                         </div>
                       </div>
                     )}
+
                     {room.notes && <p style={{ fontSize: "11px", color: "#B8952A", margin: "0 0 12px", fontStyle: "italic" }}>{room.notes}</p>}
+
+                    {/* Room Photos */}
+                    {photos.length > 0 && (
+                      <div style={{ display: "flex", gap: "4px", flexWrap: "wrap", marginBottom: "10px" }}>
+                        {photos.map((photo, idx) => (
+                          <div key={idx} style={{ position: "relative", display: "inline-block" }}>
+                            <img src={photo} alt={`Room ${room.room_number}`} style={{ width: "64px", height: "48px", objectFit: "cover", border: "1px solid #E5E7EB" }} />
+                            <button
+                              onClick={() => handlePhotoDelete(room.id, photo)}
+                              style={{ position: "absolute", top: "2px", right: "2px", backgroundColor: "rgba(0,0,0,0.6)", color: "white", border: "none", width: "14px", height: "14px", fontSize: "9px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}
+                            >✕</button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Upload Photo */}
+                    <div style={{ marginBottom: "12px" }}>
+                      <label style={{ fontSize: "11px", color: "#B8952A", cursor: "pointer", fontWeight: 600 }}>
+                        {uploadingRoomId === room.id ? "Uploading..." : "+ Add Photo"}
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/jpg,image/png,image/webp"
+                          style={{ display: "none" }}
+                          disabled={uploadingRoomId === room.id}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handlePhotoUpload(room.id, file);
+                          }}
+                        />
+                      </label>
+                      <span style={{ fontSize: "10px", color: "#9CA3AF", marginLeft: "8px" }}>JPG, PNG, WebP · Max 3MB</span>
+                    </div>
+
                     <div style={{ borderTop: "1px solid #F3F4F6", paddingTop: "12px" }}>
                       <select value={room.status} onChange={(e) => handleStatusUpdate(room.id, e.target.value)} style={{ width: "100%", padding: "6px 10px", border: "1px solid #E5E7EB", fontSize: "12px", color: "#1B2D5B", outline: "none", backgroundColor: "white", cursor: "pointer" }}>
                         {statuses.filter(s => s !== "All").map(s => <option key={s} value={s}>{s}</option>)}
@@ -268,7 +340,7 @@ export default function Rooms() {
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                   <tr style={{ backgroundColor: "#F9FAFB" }}>
-                    {["Room", "Type", "Floor", "Capacity", "Rate/Night", "Status", ""].map((h, i) => (
+                    {["Room", "Type", "Floor", "Capacity", "Rate/Night", "Photos", "Status", ""].map((h, i) => (
                       <th key={i} style={{ padding: "10px 16px", textAlign: "left", fontSize: "10px", fontWeight: 600, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: "1px solid #E5E7EB" }}>{h}</th>
                     ))}
                   </tr>
@@ -276,6 +348,7 @@ export default function Rooms() {
                 <tbody>
                   {filtered.map((room, i) => {
                     const rt = getRoomType(room.room_type_id);
+                    const photos = room.photos || [];
                     return (
                       <tr key={room.id} style={{ borderBottom: i < filtered.length - 1 ? "1px solid #F3F4F6" : "none" }}>
                         <td style={{ padding: "12px 16px", fontSize: "13px", color: "#1B2D5B", fontWeight: 600 }}>Room {room.room_number}</td>
@@ -283,6 +356,25 @@ export default function Rooms() {
                         <td style={{ padding: "12px 16px", fontSize: "13px", color: "#6B7280" }}>Floor {room.floor || "—"}</td>
                         <td style={{ padding: "12px 16px", fontSize: "13px", color: "#6B7280" }}>{rt?.capacity || "—"}</td>
                         <td style={{ padding: "12px 16px", fontSize: "13px", color: "#1B2D5B", fontWeight: 500 }}>₦{rt?.base_price.toLocaleString() || "—"}</td>
+                        <td style={{ padding: "12px 16px" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                            {photos.slice(0, 2).map((photo, idx) => (
+                              <img key={idx} src={photo} alt="" style={{ width: "32px", height: "24px", objectFit: "cover", border: "1px solid #E5E7EB" }} />
+                            ))}
+                            <label style={{ fontSize: "11px", color: "#B8952A", cursor: "pointer", fontWeight: 600 }}>
+                              +
+                              <input
+                                type="file"
+                                accept="image/*"
+                                style={{ display: "none" }}
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) handlePhotoUpload(room.id, file);
+                                }}
+                              />
+                            </label>
+                          </div>
+                        </td>
                         <td style={{ padding: "12px 16px" }}>
                           <span style={{ backgroundColor: statusBg[room.status], color: statusColor[room.status], padding: "3px 8px", fontSize: "10px", fontWeight: 600 }}>{room.status}</span>
                         </td>
