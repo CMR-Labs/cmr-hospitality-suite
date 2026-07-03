@@ -27,6 +27,7 @@ class Room(Base):
     floor = Column(Integer)
     status = Column(String(50), default="Available")
     notes = Column(Text)
+    photos = Column(ARRAY(String), default=[])
 
     hotel = relationship("Hotel", backref="rooms")
     room_type = relationship("RoomType", backref="rooms")
