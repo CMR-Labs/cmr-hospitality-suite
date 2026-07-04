@@ -97,13 +97,14 @@ STAFF:
 @router.post("/chat")
 @limiter.limit("5/minute")
 async def chat(
-    request: ChatRequest,
+    request: Request,
+    data: ChatRequest,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
     hotel_id: UUID = Depends(get_current_hotel_id),
 ):
-    if not settings.ANTHROPIC_API_KEY:
-        raise HTTPException(status_code=500, detail="AI service not configured")
+    from app.services.subscription import check_ai_access
+    await check_ai_access(db, hotel_id)
 
     hotel_context = await get_hotel_context(db, hotel_id)
 

@@ -21,13 +21,25 @@ async def get_rooms(
 
 @router.post("/", response_model=RoomResponse)
 async def create_room(
+    request: Request,
     data: RoomCreate,
     db: AsyncSession = Depends(get_db),
     hotel_id: UUID = Depends(get_current_hotel_id),
+    current_user: User = Depends(get_current_user),
     _: None = Depends(require_permission("rooms.create")),
 ):
+    from app.services.subscription import check_room_limit
+    await check_room_limit(db, hotel_id)
+
     room = Room(hotel_id=hotel_id, **data.model_dump())
     db.add(room)
+    await db.flush()
+    await log_action(
+        db=db, action="room.created", user=current_user,
+        description=f"Created room {data.room_number}",
+        table_name="rooms", record_id=room.id,
+        ip_address=request.client.host if request.client else None,
+    )
     await db.commit()
     await db.refresh(room)
     return room

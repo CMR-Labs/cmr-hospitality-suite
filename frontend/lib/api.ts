@@ -27,7 +27,9 @@ async function request(method: string, path: string, body?: unknown) {
   }
 
   if (response.status === 403) {
-    throw new Error("You do not have permission to perform this action.");
+    const error = await response.json().catch(() => ({ detail: "Permission denied" }));
+    throw new Error(error.detail || "You do not have permission to perform this action.");
+}
   }
 
   if (!response.ok) {
