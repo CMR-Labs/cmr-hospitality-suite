@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.core.database import get_db
-from app.core.security import get_current_hotel_id, require_permission
+from app.core.security import get_current_hotel_id, get_current_user, require_permission
 from app.models.room import Room, RoomType
+from app.models.user import User
 from app.schemas.room import RoomCreate, RoomUpdate, RoomResponse, RoomTypeCreate, RoomTypeResponse
+from app.services.audit import log_action
 from typing import List
 from uuid import UUID
 
