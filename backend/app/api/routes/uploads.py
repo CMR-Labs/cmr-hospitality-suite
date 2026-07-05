@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm.attributes import flag_modified
 from app.core.database import get_db
 from app.core.security import get_current_user, get_current_hotel_id
 from app.models.hotel import Hotel
@@ -12,8 +13,8 @@ from uuid import UUID
 router = APIRouter(prefix="/uploads", tags=["Uploads"])
 
 ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
-MAX_LOGO_SIZE = 5 * 1024 * 1024  # 5MB
-MAX_PHOTO_SIZE = 3 * 1024 * 1024  # 3MB per photo
+MAX_LOGO_SIZE = 5 * 1024 * 1024
+MAX_PHOTO_SIZE = 3 * 1024 * 1024
 
 @router.post("/hotel-logo")
 async def upload_hotel_logo_endpoint(
@@ -35,6 +36,7 @@ async def upload_hotel_logo_endpoint(
     hotel = result.scalar_one_or_none()
     if hotel:
         hotel.logo_url = logo_url
+        flag_modified(hotel, "logo_url")
         await db.commit()
 
     return {"logo_url": logo_url, "message": "Logo uploaded successfully"}
@@ -51,7 +53,7 @@ async def upload_room_photo_endpoint(
     if not plan or not plan.has_photos:
         raise HTTPException(
             status_code=403,
-            detail=f"Room photo uploads are not available on your current plan. Upgrade to Professional or higher."
+            detail="Room photo uploads are not available on your current plan. Upgrade to Professional or higher."
         )
 
     result = await db.execute(select(Room).where(Room.id == room_id, Room.hotel_id == hotel_id))
@@ -59,7 +61,8 @@ async def upload_room_photo_endpoint(
     if not room:
         raise HTTPException(status_code=404, detail="Room not found")
 
-    current_photos = room.photos or []
+    current_photos = list(room.photos) if room.photos else []
+
     if len(current_photos) >= plan.photo_limit_per_room:
         raise HTTPException(
             status_code=403,
@@ -76,8 +79,11 @@ async def upload_room_photo_endpoint(
 
     photo_url = upload_room_photo(file_bytes, file.content_type, str(hotel_id), str(room_id))
 
-    room.photos = current_photos + [photo_url]
+    new_photos = current_photos + [photo_url]
+    room.photos = new_photos
+    flag_modified(room, "photos")
     await db.commit()
+    await db.refresh(room)
 
     return {"photo_url": photo_url, "photos": room.photos, "message": "Photo uploaded successfully"}
 
@@ -93,8 +99,9 @@ async def delete_room_photo_endpoint(
     if not room:
         raise HTTPException(status_code=404, detail="Room not found")
 
-    current_photos = room.photos or []
+    current_photos = list(room.photos) if room.photos else []
     room.photos = [p for p in current_photos if p != photo_url]
+    flag_modified(room, "photos")
     await db.commit()
 
     return {"message": "Photo deleted", "photos": room.photos}
