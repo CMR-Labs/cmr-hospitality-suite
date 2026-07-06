@@ -22,7 +22,7 @@ class RoomTypeResponse(BaseModel):
         from_attributes = True
 
 class RoomCreate(BaseModel):
-    room_type_id: UUID
+    room_type_id: Optional[UUID] = None
     room_number: str
     floor: Optional[int] = None
     status: str = "Available"
@@ -41,6 +41,7 @@ class RoomResponse(BaseModel):
     floor: Optional[int] = None
     status: str
     notes: Optional[str] = None
+    photos: Optional[List[str]] = []
 
     class Config:
         from_attributes = True
