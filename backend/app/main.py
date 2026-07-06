@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -22,7 +21,6 @@ origins = [
     "http://localhost:3000",
     "http://localhost:3001",
     "https://cmr-hospitality-suite.vercel.app",
-    "https://cmr-hospitality-suite-*.vercel.app",
 ]
 
 app.add_middleware(
@@ -30,9 +28,10 @@ app.add_middleware(
     allow_origins=origins,
     allow_origin_regex=r"https://cmr-hospitality-suite.*\.vercel\.app",
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
     expose_headers=["*"],
+    max_age=3600,
 )
 
 app.include_router(api_router)
