@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "https://cmr-hospitality-suite.vercel.app"
     SUPABASE_URL: Optional[str] = None
     SUPABASE_SERVICE_KEY: Optional[str] = None
+    SENTRY_DSN: Optional[str] = None
 
     class Config:
         env_file = ".env"
