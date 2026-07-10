@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.core.database import get_db
-from app.core.security import get_current_hotel_id
+from app.core.security import get_current_hotel_id, require_permission
 from app.models.event import EventHall, EventBooking
 from app.schemas.event import EventHallCreate, EventHallUpdate, EventHallResponse, EventBookingCreate, EventBookingResponse
 from typing import List
@@ -18,12 +18,16 @@ async def get_halls(
     result = await db.execute(select(EventHall).where(EventHall.hotel_id == hotel_id))
     return result.scalars().all()
 
-@router.post("/halls", response_model=EventHallResponse)
+@router.post("/halls")
 async def create_hall(
     data: EventHallCreate,
     db: AsyncSession = Depends(get_db),
-    hotel_id: UUID = Depends(get_current_hotel_id)
+    hotel_id: UUID = Depends(get_current_hotel_id),
+    _: None = Depends(require_permission("events.manage")),
 ):
+    from app.services.subscription import check_event_access
+    await check_event_access(db, hotel_id)
+
     hall = EventHall(hotel_id=hotel_id, **data.model_dump())
     db.add(hall)
     await db.commit()

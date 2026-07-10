@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.core.database import get_db
-from app.core.security import get_current_hotel_id
+from app.core.security import get_current_hotel_id, require_permission
 from app.models.staff import Staff
 from app.schemas.staff import StaffCreate, StaffUpdate, StaffResponse
 from typing import List
@@ -18,12 +18,16 @@ async def get_staff(
     result = await db.execute(select(Staff).where(Staff.hotel_id == hotel_id))
     return result.scalars().all()
 
-@router.post("/", response_model=StaffResponse)
+@router.post("/")
 async def create_staff(
     data: StaffCreate,
     db: AsyncSession = Depends(get_db),
-    hotel_id: UUID = Depends(get_current_hotel_id)
+    hotel_id: UUID = Depends(get_current_hotel_id),
+    _: None = Depends(require_permission("staff.manage")),
 ):
+    from app.services.subscription import check_staff_limit
+    await check_staff_limit(db, hotel_id)
+
     staff = Staff(hotel_id=hotel_id, **data.model_dump())
     db.add(staff)
     await db.commit()
