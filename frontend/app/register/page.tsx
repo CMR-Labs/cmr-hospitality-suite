@@ -101,9 +101,13 @@ export default function Register() {
             </p>
             <div style={{ borderTop: "1px solid #e5e0d8", paddingTop: "20px", textAlign: "center" }}>
               <p style={{ color: "#6B7280", fontSize: "13px", margin: 0 }}>Already have an account? <Link href="/login" style={{ color: "#B8952A", textDecoration: "none", fontWeight: 600 }}>Sign in</Link></p>
+            <p style={{ fontSize: "11px", color: "#9CA3AF", textAlign: "center", margin: "8px 0 0", lineHeight: 1.6 }}>
+              By registering, you agree to our{" "}
+              <Link href="/legal/terms" style={{ color: "#B8952A", textDecoration: "none" }}>Terms of Service</Link>
+              {" "}and{" "}
+              <Link href="/legal/privacy" style={{ color: "#B8952A", textDecoration: "none" }}>Privacy Policy</Link>
+            </p>
             </div>
-          </div>
-        </div>
           </div>
         </div>
       </div>
