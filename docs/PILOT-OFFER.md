@@ -65,8 +65,8 @@ Includes:
 
 ### How to Join
 
-WhatsApp: +234 XXX XXX XXXX
-Email: usman@cmrgroup.com
+WhatsApp: +234 903 414 9815
+Email: UH@cmrgroup.com / suthmanh@gmail.com
 
 *Only 3 spots available.*
 *First come, first served.*
