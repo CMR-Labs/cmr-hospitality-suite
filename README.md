@@ -1,7 +1,7 @@
 # CMR Hospitality Suite
 
 <p align="center">
-  <img src="./docs/images/logo.png" alt="CMR Hospitality Suite Logo" width="180">
+  <img src="/cmr-hospitality-logo.jpeg" alt="CMR Hospitality Suite Logo" width="180">
 </p>
 
 <p align="center">
