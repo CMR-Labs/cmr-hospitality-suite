@@ -1,6 +1,3 @@
-#USER-GUIDE.md
-
-##Table of Contents
 Chapter 1 — Introduction
 Chapter 2 — User Roles
 Chapter 3 — Getting Started
