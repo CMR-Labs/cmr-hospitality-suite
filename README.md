@@ -1,76 +1,111 @@
-# CMR Hospitality Suite
-
 <p align="center">
   <img src="https://cmr-hospitality-suite.vercel.app/cmr-hospitality-logo.jpeg" alt="CMR Hospitality Suite Logo" width="520">
 </p>
 
+<h1 align="center">CMR Hospitality Suite</h1>
+
 <p align="center">
-  <strong>AI-Powered Hospitality Management Platform</strong><br>
-  Modern hotel operations, reservations, payments, staff management, CRM, analytics, and AI concierge in one unified platform.
+  <strong>AI-Powered Hospitality Management Platform</strong>
 </p>
 
+<p align="center">
+  Modern hotel operations, reservations, payments, CRM, analytics, housekeeping, event management, and AI—all in one secure, cloud-based platform.
+</p>
+
+<p align="center">
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![FastAPI](https://img.shields.io/badge/FastAPI-Python-009688?logo=fastapi)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-336791?logo=postgresql)
+![License](https://img.shields.io/badge/License-Proprietary-red)
+![Status](https://img.shields.io/badge/Status-Release%20Candidate-success)
+
+</p>
+## 🌟 Overview
+
+**CMR Hospitality Suite** is a modern, cloud-based Hospitality Management System (HMS) developed by **CMR Labs**, the software engineering division of **CMR Group**.
+
+Built for hotels, resorts, guest houses, serviced apartments, and event centres, the platform streamlines daily operations through a secure, scalable, and intelligent all-in-one solution.
+
+Instead of relying on multiple disconnected tools, CMR Hospitality Suite unifies reservations, guest management, room operations, housekeeping, event management, payments, customer relationship management (CRM), business analytics, and AI-powered assistance into a single, centralized platform.
+
+Designed with a multi-tenant architecture and enterprise-grade security, the platform empowers hospitality businesses to improve operational efficiency, deliver exceptional guest experiences, and make informed decisions through real-time insights.
+
 ---
 
-## Overview
+## 🎯 Vision
 
-CMR Hospitality Suite is a modern, cloud-based hospitality management platform developed by **CMR Labs**, a subsidiary of **CMR Group**.
-
-The platform enables hotels, resorts, guest houses, serviced apartments, and event centres to digitize and automate their daily operations through a secure, scalable, and intelligent software solution.
-
-Rather than managing multiple disconnected systems, CMR Hospitality Suite centralizes reservations, guest management, payments, housekeeping, event management, analytics, customer relationship management, and AI-powered assistance within a single platform.
+To become Africa's leading hospitality technology platform by empowering hospitality businesses with intelligent digital solutions that simplify operations, enhance guest experiences, and drive sustainable growth through innovation.
 
 ---
 
-## Vision
+## ✨ Key Features
 
-To become Africa's leading hospitality operations platform by helping hospitality businesses simplify operations, improve guest experiences, and make data-driven decisions through intelligent technology.
+### 🏨 Front Office Management
 
----
+Manage every stage of the guest journey from booking to departure.
 
-## Key Features
-
-### Front Office
-
-- Reservations Management
+- Reservation Management
 - Guest Management
-- Check-in / Check-out
+- Check-in & Check-out
 - Room Availability
-- Room Types
+- Room Type Management
 - Online Payments
 - Booking History
 
-### Operations
+---
+
+### 🛎️ Hotel Operations
+
+Coordinate daily hotel activities from a unified operational dashboard.
 
 - Housekeeping Management
 - Staff Management
 - Event Hall Management
 - Event Bookings
-- Notifications
-- Reports
+- System Notifications
+- Operational Reports
 - Audit Logs
 
-### Business Intelligence
+---
 
-- Live Dashboard
+### 📊 Business Intelligence & Analytics
+
+Monitor hotel performance with real-time insights and actionable metrics.
+
+- Live Executive Dashboard
 - Occupancy Analytics
 - Revenue Analytics
-- Guest Insights
-- Operational Metrics
+- Guest Behaviour Insights
+- Operational Performance Metrics
 
-### Customer Relationship Management
+---
 
-- Customer Database
+### 🤝 Customer Relationship Management (CRM)
+
+Build stronger guest relationships and improve customer retention.
+
+- Centralized Guest Database
 - Customer Segmentation
-- Guest History
+- Guest Stay History
 - Interaction Tracking
 
-### Artificial Intelligence
+---
+
+### 🤖 AI Concierge
+
+Enhance staff productivity with an intelligent AI-powered hotel assistant.
 
 - AI Concierge
-- Intelligent Hotel Assistant
+- Operational Assistance
+- Intelligent Knowledge Retrieval
 - Secure Anthropic API Integration
 
-### Security
+---
+
+### 🔒 Enterprise Security
+
+Built with security, compliance, and scalability at its core.
 
 - JWT Authentication
 - Email Verification
@@ -78,198 +113,367 @@ To become Africa's leading hospitality operations platform by helping hospitalit
 - Role-Based Access Control (RBAC)
 - Multi-Tenant Architecture
 - Audit Logging
-- Rate Limiting
-- Secure Password Hashing
+- API Rate Limiting
+- Secure Password Hashing (bcrypt)
 
 ---
-
-## Technology Stack
-
-### Frontend
-
-- Next.js 16
-- TypeScript
-- Tailwind CSS
-
-### Backend
-
-- FastAPI
-- Python 3.11
-- SQLAlchemy
-
-### Database
-
-- PostgreSQL
-- Supabase
-
-### Integrations
-
-- Paystack
-- Resend
-- Anthropic Claude AI
-
-### Deployment
-
-- Vercel
-- Render *(planned migration to DigitalOcean)*
-
 ---
 
-## System Modules
+## 🛠️ Technology Stack
 
-- Landing Website
-- Authentication
-- Dashboard
-- Rooms
-- Room Types
-- Reservations
-- Guests
-- Payments
-- Staff
-- Housekeeping
-- Event Halls
-- CRM
-- Analytics
-- AI Concierge
-- Notifications
-- Reports
-- Settings
-- Audit Logs
-- Administration Panel
+CMR Hospitality Suite is built using a modern, scalable, and cloud-native technology stack designed for performance, security, and maintainability.
 
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| **Frontend** | Next.js 16 | React framework for server-side rendering and modern web applications |
+| | TypeScript | Type-safe JavaScript for scalable development |
+| | Tailwind CSS | Utility-first CSS framework for responsive and consistent UI |
+| **Backend** | FastAPI | High-performance Python web framework for RESTful APIs |
+| | Python 3.11 | Backend programming language powering business logic |
+| | SQLAlchemy | ORM for database modelling and query management |
+| **Database** | PostgreSQL | Relational database for secure and reliable data storage |
+| | Supabase | Managed PostgreSQL database with storage and backend services |
+| **Authentication & Security** | JWT | Secure user authentication and session management |
+| | bcrypt | Password hashing and credential security |
+| **Payments** | Paystack | Secure online payment processing and transaction verification |
+| **Email Services** | Resend | Transactional email delivery for verification, notifications, and password resets |
+| **Artificial Intelligence** | Anthropic Claude AI | AI Concierge for intelligent hotel assistance and operational support |
+| **Cloud Deployment** | Vercel | Frontend hosting with global CDN and automatic deployments |
+| | Render | Backend API hosting *(planned migration to DigitalOcean App Platform)* |
+| **Version Control** | Git & GitHub | Source code management, collaboration, and continuous version tracking |
 ---
 
-## Project Architecture
+## 🚀 System Modules
 
+CMR Hospitality Suite is a comprehensive hospitality operations platform that combines modern 3D-inspired design, intelligent automation, and enterprise-grade management tools into a unified experience.
+
+### 🌐 Public Experience
+- 🏠 **Landing Website** – Modern marketing website with a premium 3D-inspired user interface
+- 🔐 **Authentication** – Secure login, registration, email verification, and password recovery
+
+### 🏨 Hotel Operations
+- 📊 **Dashboard** – Live operational KPIs, occupancy, revenue, and business insights
+- 🛏️ **Rooms** – Room inventory, availability, pricing, and photo management
+- 🏷️ **Room Types** – Configure room categories, amenities, and pricing structures
+- 📅 **Reservations** – Booking lifecycle, check-in, check-out, and reservation management
+- 👤 **Guests** – Guest profiles, stay history, preferences, and VIP management
+
+### 💼 Business Management
+- 💳 **Payments** – Secure payment processing with Paystack integration
+- 👥 **Staff Management** – Employee records, departments, shifts, and role assignments
+- 🧹 **Housekeeping** – Task assignment, room status tracking, and maintenance coordination
+- 🎉 **Event Halls** – Hall management, bookings, scheduling, and event operations
+- 🤝 **CRM** – Customer relationship management, segmentation, and guest engagement
+
+### 📈 Intelligence & Automation
+- 📊 **Analytics** – Real-time occupancy, revenue, and operational analytics
+- 🤖 **AI Concierge** – AI-powered hotel assistant built with Anthropic Claude
+- 🔔 **Notifications** – System alerts, booking updates, and operational reminders
+- 📑 **Reports** – Exportable operational and financial reports
+
+### ⚙️ Administration & Security
+- ⚙️ **Settings** – Hotel profile, branding, preferences, and system configuration
+- 📝 **Audit Logs** – Complete activity tracking and compliance logging
+- 🛡️ **Administration Panel** – Platform administration, user management, subscriptions, and system monitoring
+
+## 🏗️ Project Architecture
+
+CMR Hospitality Suite follows a modern cloud-native, multi-tier architecture that separates the presentation layer, business logic, data layer, and external services for scalability, maintainability, and security.
+
+```text
+                                     🌐 Users
+                                        │
+                                        ▼
+┌───────────────────────────────────────────────────────────────┐
+│                     Presentation Layer                        │
+│                                                               │
+│          ⚡ Next.js 16 • TypeScript • Tailwind CSS            │
+│                     (Hosted on Vercel)                        │
+└──────────────────────────────┬────────────────────────────────┘
+                               │
+                         HTTPS / REST API
+                               │
+                               ▼
+                ╔══════════════════════════════╗
+                ║     FastAPI Backend API      ║
+                ║                              ║
+                ║  • Authentication            ║
+                ║  • Business Logic            ║
+                ║  • RBAC & Permissions        ║
+                ║  • Multi-Tenant Isolation    ║
+                ║  • Audit Logging             ║
+                ╚══════════════════════════════╝
+                               │
+                               ▼
+┌───────────────────────────────────────────────────────────────┐
+│                     PostgreSQL Database                       │
+│                        (Supabase)                             │
+├───────────────────────────────────────────────────────────────┤
+│ Hotels │ Users │ Rooms │ Guests │ Reservations │ Payments     │
+│ Staff │ Housekeeping │ Event Halls │ CRM │ Audit Logs         │
+└──────────────────────────────┬────────────────────────────────┘
+                               │
+        ┌──────────────────────┼────────────────────────┐
+        │                      │                        │
+        ▼                      ▼                        ▼
+┌───────────────┐     ┌────────────────┐      ┌────────────────┐
+│ Supabase      │     │ Resend         │      │ Paystack       │
+│ Storage       │     │ Email Service  │      │ Payments       │
+│               │     │                │      │                │
+│ Logos         │     │ Verification   │      │ Initialize     │
+│ Room Photos   │     │ Password Reset │      │ Verify         │
+└───────────────┘     └────────────────┘      └────────────────┘
+                               │
+                               ▼
+                    ┌────────────────────┐
+                    │ Anthropic Claude   │
+                    │ AI Concierge       │
+                    └────────────────────┘
+                               │
+                               ▼
+                    ┌────────────────────┐
+                    │ Sentry Monitoring  │
+                    │ Error Tracking     │
+                    └────────────────────┘
 ```
-Frontend (Next.js)
-        │
-        ▼
- FastAPI Backend
-        │
-        ▼
- PostgreSQL (Supabase)
-        │
- ├── Authentication
- ├── Reservations
- ├── Payments
- ├── Analytics
- ├── CRM
- ├── AI Concierge
- └── Audit Logs
-```
+
+### Architecture Layers
+
+| Layer | Technology | Responsibility |
+|-------|------------|----------------|
+| **Presentation** | Next.js 16, TypeScript, Tailwind CSS | User interface and dashboard |
+| **Application** | FastAPI, Python | Business logic, APIs, authentication, RBAC |
+| **Data** | PostgreSQL (Supabase) | Persistent application data |
+| **Storage** | Supabase Storage | Hotel logos, room images, future documents |
+| **Payments** | Paystack | Payment processing and verification |
+| **Email** | Resend | Email verification, password reset, notifications |
+| **Artificial Intelligence** | Anthropic Claude | AI Concierge and intelligent assistance |
+| **Monitoring** | Sentry | Error monitoring and production diagnostics |
 
 ---
 
-## Repository Structure
+## 📂 Repository Structure
 
-```
+```text
 cmr-hospitality-suite/
-
-├── frontend/
-├── backend/
-├── docs/
-├── database/
-├── scripts/
-├── tests/
-├── .github/
-└── README.md
+│
+├── frontend/              # Next.js 16 frontend application
+├── backend/               # FastAPI backend services
+├── database/              # Database schema, migrations & seed scripts
+├── docs/                  # Project documentation
+├── scripts/               # Utility and deployment scripts
+├── tests/                 # Unit & integration tests
+├── .github/               # GitHub workflows and templates
+│
+├── README.md
+├── LICENSE
+├── ROADMAP.md
+├── ARCHITECTURE.md
+├── DATABASE.md
+├── API.md
+├── INSTALLATION.md
+├── DEPLOYMENT.md
+├── SECURITY.md
+├── RBAC.md
+└── CHANGELOG.md
 ```
 
 ---
 
-## Screenshots
+# 🏗️ System Architecture
 
-Coming soon.
+CMR Hospitality Suite follows a modern cloud-native, multi-tenant architecture designed for scalability, security, and maintainability.
 
----
+### High-Level Architecture (3D)
 
-## Installation
+> *(Replace with your architecture diagram once created.)*
 
-See:
-
-- INSTALLATION.md
-- DEPLOYMENT.md
-
----
-
-## Documentation
-
-Project documentation includes:
-
-- Architecture
-- Database
-- API
-- RBAC
-- Deployment
-- Installation
-- Roadmap
-- Security
-- Testing
-
-Available in the `/docs` directory.
+<p align="center">
+  <img src="./docs/images/architecture-3d.png" width="900" alt="CMR Hospitality Suite 3D Architecture">
+</p>
 
 ---
 
-## Roadmap
+### Infrastructure Overview
 
-Current development status:
+```text
+                         Internet
+                             │
+                             ▼
+                    Vercel Edge Network
+                             │
+                Next.js Frontend (React)
+                             │
+                     Secure REST API
+                             │
+                             ▼
+                    FastAPI Application
+                             │
+        ┌────────────────────┼─────────────────────┐
+        │                    │                     │
+        ▼                    ▼                     ▼
+ PostgreSQL           Supabase Storage        Background Jobs
+  (Supabase)          Logos • Images           (Future)
 
-- ✅ Authentication
-- ✅ Dashboard
-- ✅ Reservations
-- ✅ Payments
-- ✅ Analytics
-- ✅ CRM
-- ✅ AI Concierge
-- ✅ RBAC
-- ✅ Audit Logs
-- ✅ Subscription System
-- 🚧 Mobile Optimization
-- 🚧 Guest Booking Portal
-- 🚧 WhatsApp Notifications
-- 🚧 SMS Integration
-
----
-
-## Security
-
-CMR Hospitality Suite implements enterprise-grade security practices including:
-
-- JWT Authentication
-- Password Hashing
-- Email Verification
-- Role-Based Access Control
-- Multi-Tenant Isolation
-- Audit Logging
-- Rate Limiting
-
-See **SECURITY.md** for additional information.
+        │
+        ├───────────────┬────────────────┬────────────────┐
+        │               │                │                │
+        ▼               ▼                ▼                ▼
+   Paystack         Resend Email     Claude AI         Sentry
+   Payments       Notifications      Concierge      Error Monitoring
+```
 
 ---
 
-## Developed By
+# 📸 Product Preview
 
-**CMR Labs**
+The screenshots below demonstrate the major modules available within CMR Hospitality Suite.
 
-A software engineering and artificial intelligence division of **CMR Group**, focused on building intelligent digital infrastructure, automation platforms, and enterprise software solutions.
+> **Coming Soon**
+
+| Module | Preview |
+|---------|----------|
+| Landing Page | 🖼️ |
+| Dashboard | 🖼️ |
+| Reservations | 🖼️ |
+| Rooms | 🖼️ |
+| Guests | 🖼️ |
+| Payments | 🖼️ |
+| Analytics | 🖼️ |
+| CRM | 🖼️ |
+| AI Concierge | 🖼️ |
+| Admin Panel | 🖼️ |
 
 ---
 
-## License
+# 🚀 Installation
 
-Copyright © 2026 CMR Group.
+Complete installation instructions are available in the following documentation:
+
+- 📘 **INSTALLATION.md** — Local development setup
+- 📘 **DEPLOYMENT.md** — Production deployment guide
+- 📘 **CONFIGURATION.md** — Environment configuration
+
+---
+
+# 📚 Documentation
+
+Comprehensive project documentation is available inside the **docs/** directory.
+
+| Document | Description |
+|-----------|-------------|
+| 📖 ARCHITECTURE.md | System architecture and infrastructure |
+| 🗄 DATABASE.md | Database schema and relationships |
+| 🔌 API.md | REST API reference |
+| 🔐 RBAC.md | Roles and permissions |
+| ⚙️ DEPLOYMENT.md | Deployment guide |
+| 💻 INSTALLATION.md | Local installation |
+| 🛡 SECURITY.md | Security architecture |
+| 🧪 TESTING.md | Testing strategy |
+| 🛣 ROADMAP.md | Product roadmap |
+| 📜 CHANGELOG.md | Version history |
+
+---
+
+# 🗺️ Development Roadmap
+
+Current project progress:
+
+| Module | Status |
+|---------|:------:|
+| Authentication | ✅ |
+| Dashboard | ✅ |
+| Rooms | ✅ |
+| Reservations | ✅ |
+| Guests | ✅ |
+| Payments | ✅ |
+| Analytics | ✅ |
+| CRM | ✅ |
+| AI Concierge | ✅ |
+| RBAC | ✅ |
+| Audit Logs | ✅ |
+| Subscription System | ✅ |
+| Feature Gating | ✅ |
+| Mobile Optimization | 🚧 |
+| Guest Booking Portal | 🚧 |
+| WhatsApp Integration | 🚧 |
+| SMS Integration | 🚧 |
+
+For the complete roadmap, see **ROADMAP.md**.
+
+---
+
+# 🔒 Security
+
+Security is a core design principle of CMR Hospitality Suite.
+
+Implemented features include:
+
+- ✅ JWT Authentication
+- ✅ Secure Password Hashing (bcrypt)
+- ✅ Email Verification
+- ✅ Password Reset
+- ✅ Role-Based Access Control (RBAC)
+- ✅ Multi-Tenant Data Isolation
+- ✅ Audit Logging
+- ✅ Rate Limiting
+- ✅ API Authorization Middleware
+- ✅ Secure AI Backend Proxy
+
+Additional implementation details are available in **SECURITY.md**.
+
+---
+
+# 👨‍💻 Developed By
+
+## CMR Labs
+
+**CMR Labs** is the software engineering and artificial intelligence division of **CMR Group**.
+
+Our mission is to design and build secure, scalable, and intelligent software solutions that transform how businesses operate through automation, artificial intelligence, and digital infrastructure.
+
+**Focus Areas**
+
+- Hospitality Technology
+- Business Automation
+- Enterprise SaaS
+- Artificial Intelligence
+- Cloud Infrastructure
+- Security Systems
+- Digital Transformation
+
+---
+
+# 📄 License
+
+Copyright © **2026 CMR Group**.
 
 All Rights Reserved.
 
-This software is proprietary and may not be copied, modified, distributed, or used without prior written permission from CMR Group.
+CMR Hospitality Suite is proprietary software developed by **CMR Labs**.
+
+No part of this software may be copied, modified, distributed, reverse-engineered, or used without prior written permission from CMR Group.
+
+See the **LICENSE** file for licensing terms.
 
 ---
 
-## Contact
+# 📬 Contact
 
-Website: *Coming Soon*
+🌐 **Website**  
+*Coming Soon*
 
-Email: *Coming Soon*
+📧 **Email**  
+*suthmanh@gmail.com*
+
+💻 **GitHub Organization**  
+https://github.com/CMR-Labs
+
+---
+
+<p align="center">
+<strong>Built with ❤️ by CMR Labs</strong><br>
+Creating intelligent software for the future of hospitality.
+</p>
 
 GitHub: https://github.com/CMR-Labs
