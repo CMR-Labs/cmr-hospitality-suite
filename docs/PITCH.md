@@ -73,8 +73,8 @@ CMR Hospitality Suite is a complete cloud-based hotel management platform built 
 ### Contact
 
 Usman — Founder, CMR Group
-Email: usman@cmrgroup.com
-WhatsApp: +234 XXX XXX XXXX
+Email: usman@cmrgroup.com / suthmanh@gmail.com
+WhatsApp: +234 903 414 9815
 Website: cmr-hospitality-suite.vercel.app
 
 ---
