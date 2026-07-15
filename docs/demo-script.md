@@ -5,7 +5,7 @@
 
 ### Before the Demo
 - [ ] Open https://cmr-hospitality-suite.vercel.app/login
-- [ ] Log in as demo@cmrhospitality.com / CMRDemo2026
+- [ ] Log in as demo@cmrhospitality.com / MAISHAGO123
 - [ ] Have the landing page open in another tab
 - [ ] Run: python seed.py --reset (to reset fresh data)
 
