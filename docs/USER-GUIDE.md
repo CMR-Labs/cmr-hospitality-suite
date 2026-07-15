@@ -1,3 +1,6 @@
+#USER-GUIDE.md
+
+##Table of Contents
 Chapter 1 — Introduction
 Chapter 2 — User Roles
 Chapter 3 — Getting Started
@@ -19,335 +22,212 @@ Chapter 18 — Settings
 Chapter 19 — Audit Logs
 Chapter 20 — Admin Panel
 
-------------------------------------
-------------------------------------
-Chapter 1 — Introduction
-About CMR Hospitality Suite
-
-CMR Hospitality Suite is an AI-powered Hospitality Management Platform designed to help hotels, guest houses, serviced apartments, resorts, and event centres manage their daily operations from a single secure platform.
-
-The system centralizes reservations, guest records, room management, housekeeping, payments, customer relationship management, analytics, staff administration, and AI assistance while ensuring security through Role-Based Access Control (RBAC), audit logging, and multi-tenant data isolation.
-
-Intended Users
-
-The system is designed for multiple users within a hotel.
-
-Role	Purpose
-Super Admin	Manages the entire CMR Hospitality platform
-Hotel Owner	Owns and manages a hotel
-General Manager	Oversees daily hotel operations
-Receptionist	Handles guests and reservations
-Finance Officer	Manages payments and refunds
-Housekeeping Staff	Manages room cleaning and maintenance tasks
-Event Manager	Manages event halls and bookings
-
-Every user only sees the features their assigned role allows.
-
-Logging In
-
-Users access the platform using their registered email address and password.
-
-Before first login:
-
-Register
-Verify email
-Login
-Select hotel (if applicable)
-Access dashboard
-
-Password reset is available from the login page.
-
-Dashboard Overview
-
-The Dashboard is the central workspace after login.
-
-It provides:
-
-Occupancy statistics
-Revenue summary
-Reservation activity
-Room availability
-Housekeeping status
-Recent payments
-Notifications
-Quick actions
-
-The information displayed depends on the user's role.
-
-Dashboard Modules
-
-Below is the purpose of every module and who should use it.
-
-Dashboard
-Purpose
-
-Provides a live operational overview of the hotel.
-
-Primary Users
-Hotel Owner
-General Manager
-Secondary Users
-Receptionist (limited view)
-Key Information
-Occupancy Rate
-Revenue
-Reservations
-Guests
-Room Status
-Recent Activity
-Rooms
-Purpose
-
-Manage every room within the hotel.
-
-Used By
-Hotel Owner
-General Manager
-Receptionist
-Functions
-Add Room
-Edit Room
-Delete Room
-Mark Available
-Mark Occupied
-Mark Maintenance
-Upload Room Images
-Assign Room Type
-Room Types
-Purpose
-
-Create standardized room categories.
-
-Used By
-Hotel Owner
-Manager
-Examples
-Standard
-Deluxe
-Executive
-Suite
-Presidential Suite
-
-Each room inherits its pricing and characteristics from its assigned room type.
-
-Reservations
-Purpose
-
-Manage guest bookings.
-
-Used By
-Receptionist
-Manager
-Hotel Owner
-Functions
-Create Reservation
-Edit Reservation
-Cancel Reservation
-Check-in Guest
-Check-out Guest
-Reservation History
-Booking Status
-Guests
-Purpose
-
-Maintain guest profiles and stay history.
-
-Used By
-Receptionist
-Manager
-Functions
-Register Guest
-Update Guest Details
-View Stay History
-VIP Flag
-Guest Notes
-Payments
-Purpose
-
-Handle all financial transactions.
-
-Used By
-Finance Officer
-Hotel Owner
-Receptionist (limited)
-Functions
-Receive Payments
-Verify Paystack Transactions
-Refund Payments
-Payment History
-Generate Receipts
-Staff
-Purpose
-
-Manage hotel employees.
-
-Used By
-Hotel Owner
-Manager
-Functions
-Add Staff
-Assign Department
-Assign Role
-Activate/Deactivate Staff
-Housekeeping
-Purpose
-
-Coordinate room cleaning and maintenance tasks.
-
-Used By
-Housekeeping Staff
-Housekeeping Supervisor
-Manager
-Functions
-View Assigned Tasks
-Mark Room Cleaned
-Report Maintenance Issues
-Track Progress
-Event Halls
-Purpose
-
-Manage conference halls and event bookings.
-
-Used By
-Event Manager
-Receptionist
-Manager
-Functions
-Add Event Hall
-Create Booking
-View Schedule
-Manage Availability
-CRM
-Purpose
-
-Manage customer relationships.
-
-Used By
-Hotel Owner
-Marketing Team
-Manager
-Functions
-Customer Segmentation
-Guest Interactions
-Loyalty Tracking (future)
-Marketing Lists
-Analytics
-Purpose
-
-Provide business intelligence.
-
-Used By
-Hotel Owner
-General Manager
-Metrics
-Occupancy
-Revenue
-Average Stay
-Top Guests
-Payment Trends
-Reservation Trends
-AI Concierge
-Purpose
-
-Provide intelligent assistance for hotel staff.
-
-Used By
-
-All authenticated users (subject to subscription and permissions).
-
-Functions
-Answer operational questions
-Retrieve hotel information
-Assist with workflows
-Generate insights
-Improve staff productivity
-Notifications
-Purpose
-
-Display important system events.
-
-Used By
-
-All users.
-
-Examples include:
-
-Reservation confirmations
-Payment updates
-Housekeeping assignments
-System alerts
-Reports
-Purpose
-
-Generate operational and financial reports.
-
-Used By
-Manager
-Finance
-Hotel Owner
-Reports
-Occupancy Report
-Revenue Report
-Reservation Report
-Staff Report
-Payment Report
-
-Reports can be exported where permitted.
-
-Settings
-Purpose
-
-Configure hotel and account preferences.
-
-Used By
-Hotel Owner
-Manager (limited)
-Functions
-Hotel Profile
-Logo
-Contact Details
-Currency
-Timezone
-Password
-Notification Preferences
-Audit Logs
-Purpose
-
-Maintain a secure record of important system activities.
-
-Used By
-Hotel Owner
-Super Admin
-Logged Events
-User Login
-Reservation Created
-Payment Processed
-Settings Changed
-Role Assigned
-User Deleted
-
-Audit logs cannot be modified by standard users.
-
-Admin Panel
-Purpose
-
-Manage the SaaS platform itself.
-
-Used By
-Super Admin (CMR Group)
-Functions
-Manage Hotels
-Manage Users
-Platform Statistics
-View Audit Logs
-Monitor System Health
-Manage Subscriptions
-
-Regular hotel users do not have access to this module.
-
-
----------------------------------------
----------------------------------------
+# Chapter 1 — Introduction
+
+## Welcome to CMR Hospitality Suite
+
+Welcome to **CMR Hospitality Suite**, an AI-powered Hospitality Management Platform developed by **CMR Labs**, a software engineering and artificial intelligence division of **CMR Group**.
+
+CMR Hospitality Suite is designed to simplify and automate the day-to-day operations of hotels, resorts, guest houses, serviced apartments, and event centres. The platform provides a centralized workspace where hotel staff can manage reservations, guests, rooms, payments, housekeeping, event bookings, customer relationships, and business analytics from a single secure system.
+
+Built with a cloud-native architecture, the platform enables hospitality businesses to improve operational efficiency, reduce manual processes, and deliver exceptional guest experiences while maintaining enterprise-grade security and scalability.
+
+---
+
+# Purpose of the Platform
+
+The hospitality industry depends on speed, accuracy, and coordination across multiple departments. Traditional methods of managing reservations, guests, payments, and operations often rely on spreadsheets or disconnected software, leading to inefficiencies and data inconsistencies.
+
+CMR Hospitality Suite was created to solve these challenges by providing one integrated platform that connects every department within a hospitality business.
+
+The platform helps organizations:
+
+- Digitize daily hotel operations
+- Improve guest experiences
+- Automate repetitive tasks
+- Track operational performance
+- Secure sensitive business data
+- Enable data-driven decision making
+- Scale efficiently as the business grows
+
+---
+
+# Who is CMR Hospitality Suite For?
+
+CMR Hospitality Suite is suitable for organizations of different sizes within the hospitality industry, including:
+
+- Hotels
+- Boutique Hotels
+- Resorts
+- Guest Houses
+- Serviced Apartments
+- Lodges
+- Holiday Homes
+- Conference Centres
+- Event Centres
+- Hospitality Groups managing multiple properties
+
+Whether managing a small boutique hotel or a large multi-property hospitality business, the platform is designed to adapt to operational requirements through flexible roles, permissions, and subscription plans.
+
+---
+
+# Key Capabilities
+
+CMR Hospitality Suite provides an integrated set of operational modules, including:
+
+- Reservations Management
+- Guest Management
+- Room Management
+- Room Type Management
+- Online Payment Processing
+- Housekeeping Management
+- Staff Administration
+- Event Hall Management
+- Customer Relationship Management (CRM)
+- Business Analytics
+- Reports
+- Notifications
+- AI Concierge
+- Audit Logging
+- Administration Panel
+
+Each module is designed to work together, eliminating duplicate data entry and ensuring consistency across the organization.
+
+---
+
+# Platform Architecture
+
+CMR Hospitality Suite follows a modern Software-as-a-Service (SaaS) architecture.
+
+The platform consists of:
+
+- A web-based frontend built with Next.js
+- A FastAPI backend providing secure REST APIs
+- PostgreSQL database hosted on Supabase
+- Secure authentication using JWT
+- Role-Based Access Control (RBAC)
+- Multi-tenant data isolation
+- Cloud storage for files and images
+- Third-party integrations for payments, email, and artificial intelligence
+
+This architecture enables secure access from anywhere while ensuring each hotel's data remains completely isolated.
+
+---
+
+# Security and Access Control
+
+Security is a core design principle of CMR Hospitality Suite.
+
+The platform incorporates multiple layers of protection, including:
+
+- Secure user authentication
+- Email verification
+- Password encryption using bcrypt
+- JWT-based session management
+- Role-Based Access Control (RBAC)
+- Multi-tenant architecture
+- Audit logging
+- API rate limiting
+- Secure payment verification
+
+Every user is assigned a specific role that determines which features and data they are authorized to access.
+
+---
+
+# Intended Users
+
+CMR Hospitality Suite supports multiple user roles within a hospitality organization.
+
+These include:
+
+- Super Administrator
+- Hotel Owner
+- General Manager
+- Receptionist
+- Finance Officer
+- Housekeeping Staff
+- Event Manager
+
+Each role has a defined set of permissions that aligns with their operational responsibilities.
+
+---
+
+# System Requirements
+
+To access CMR Hospitality Suite, users require:
+
+### Supported Devices
+
+- Desktop Computer
+- Laptop
+- Tablet
+- Mobile Phone
+
+### Supported Browsers
+
+- Google Chrome
+- Microsoft Edge
+- Mozilla Firefox
+- Safari
+
+### Internet Connection
+
+A stable internet connection is required to access the cloud-hosted platform.
+
+---
+
+# Getting Started
+
+New users can begin using the platform by following these steps:
+
+1. Register an account.
+2. Verify the registered email address.
+3. Sign in to the platform.
+4. Complete the hotel onboarding process.
+5. Configure hotel information.
+6. Add room types.
+7. Create rooms.
+8. Invite staff members.
+9. Begin managing daily hotel operations.
+
+The onboarding wizard guides administrators through the initial setup process to ensure the platform is ready for operational use.
+
+---
+
+# About This User Guide
+
+This manual provides detailed instructions for using every module within CMR Hospitality Suite.
+
+It is intended for:
+
+- Hotel Owners
+- Managers
+- Receptionists
+- Finance Officers
+- Housekeeping Teams
+- Event Managers
+- System Administrators
+- Technical Support Personnel
+
+Each subsequent chapter explains the purpose of a specific module, identifies the users who should access it, and provides step-by-step guidance on performing common tasks.
+
+---
+
+# Document Information
+
+**Product:** CMR Hospitality Suite
+
+**Version:** 1.0 Release Candidate (RC)
+
+**Developed By:** CMR Labs
+
+**Parent Organization:** CMR Group
+
+**Document Type:** User Guide
+
+**Last Updated:** July 2026
+
+
 # Chapter 2 — User Roles & Permissions
 
 ## Overview
