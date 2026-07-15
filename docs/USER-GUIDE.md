@@ -1,23 +1,47 @@
-Chapter 1 — Introduction
-Chapter 2 — User Roles
-Chapter 3 — Getting Started
-Chapter 4 — Dashboard
-Chapter 5 — Rooms
-Chapter 6 — Room Types
-Chapter 7 — Reservations
-Chapter 8 — Guests
-Chapter 9 — Payments
-Chapter 10 — Staff
-Chapter 11 — Housekeeping
-Chapter 12 — Event Halls
-Chapter 13 — CRM
-Chapter 14 — Analytics
-Chapter 15 — AI Concierge
-Chapter 16 — Notifications
-Chapter 17 — Reports
-Chapter 18 — Settings
-Chapter 19 — Audit Logs
-Chapter 20 — Admin Panel
+# User Guide
+
+## Table of Contents
+
+1. [Introduction](#1-introduction)
+2. [System Overview](#2-system-overview)
+3. [User Roles & Permissions](#3-user-roles--permissions)
+4. [Getting Started](#4-getting-started)
+5. [Authentication](#5-authentication)
+6. [Dashboard Overview](#6-dashboard-overview)
+7. [Room Management](#7-room-management)
+8. [Room Types](#8-room-types)
+9. [Reservation Management](#9-reservation-management)
+10. [Guest Management](#10-guest-management)
+11. [Payment Management](#11-payment-management)
+12. [Staff Management](#12-staff-management)
+13. [Housekeeping](#13-housekeeping)
+14. [Event Hall Management](#14-event-hall-management)
+15. [Customer Relationship Management (CRM)](#15-customer-relationship-management-crm)
+16. [Analytics & Business Intelligence](#16-analytics--business-intelligence)
+17. [AI Concierge](#17-ai-concierge)
+18. [Notifications](#18-notifications)
+19. [Reports](#19-reports)
+20. [Settings](#20-settings)
+21. [Audit Logs](#21-audit-logs)
+22. [Administration Panel](#22-administration-panel)
+23. [Subscription & Feature Limits](#23-subscription--feature-limits)
+24. [Security Features](#24-security-features)
+25. [Troubleshooting](#25-troubleshooting)
+26. [Frequently Asked Questions (FAQ)](#26-frequently-asked-questions-faq)
+27. [Glossary](#27-glossary)
+28. [Support & Contact](#28-support--contact)
+
+---
+
+# Appendices
+
+- **Appendix A:** Keyboard Shortcuts *(Future)*
+- **Appendix B:** API Integrations
+- **Appendix C:** System Requirements
+- **Appendix D:** Release Notes
+- **Appendix E:** Best Practices for Hotel Operations
+- **Appendix F:** Data Backup & Recovery
+- **Appendix G:** Security Best Practices
 
 # Chapter 1 — Introduction
 
