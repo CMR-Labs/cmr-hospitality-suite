@@ -21,6 +21,7 @@
 ![Status](https://img.shields.io/badge/Status-Release%20Candidate-success)
 
 </p>
+
 ## 🌟 Overview
 
 **CMR Hospitality Suite** is a modern, cloud-based Hospitality Management System (HMS) developed by **CMR Labs**, the software engineering division of **CMR Group**.
@@ -181,9 +182,9 @@ CMR Hospitality Suite is a comprehensive hospitality operations platform that co
 CMR Hospitality Suite follows a modern cloud-native, multi-tier architecture that separates the presentation layer, business logic, data layer, and external services for scalability, maintainability, and security.
 
 ```text
-                                     🌐 Users
-                                        │
-                                        ▼
+                          🌐 Users
+                               │
+                               ▼
 ┌───────────────────────────────────────────────────────────────┐
 │                     Presentation Layer                        │
 │                                                               │
@@ -257,25 +258,26 @@ CMR Hospitality Suite follows a modern cloud-native, multi-tier architecture tha
 ```text
 cmr-hospitality-suite/
 │
-├── frontend/              # Next.js 16 frontend application
-├── backend/               # FastAPI backend services
-├── database/              # Database schema, migrations & seed scripts
-├── docs/                  # Project documentation
-├── scripts/               # Utility and deployment scripts
-├── tests/                 # Unit & integration tests
-├── .github/               # GitHub workflows and templates
+├── frontend/                 # Next.js 16 frontend application
+├── backend/                  # FastAPI backend services
+├── database/                 # Database schema, migrations & seed scripts
+├── docs/                     # Project documentation
+│   ├── ROADMAP.md
+│   ├── ARCHITECTURE.md
+│   ├── DATABASE.md
+│   ├── API.md
+│   ├── INSTALLATION.md
+│   ├── DEPLOYMENT.md
+│   ├── SECURITY.md
+│   ├── RBAC.md
+│   └── CHANGELOG.md
+│
+├── scripts/                  # Utility and deployment scripts
+├── tests/                    # Unit & integration tests
+├── .github/                  # GitHub workflows and templates
 │
 ├── README.md
-├── LICENSE
-├── ROADMAP.md
-├── ARCHITECTURE.md
-├── DATABASE.md
-├── API.md
-├── INSTALLATION.md
-├── DEPLOYMENT.md
-├── SECURITY.md
-├── RBAC.md
-└── CHANGELOG.md
+└── LICENSE
 ```
 
 ---
@@ -285,8 +287,6 @@ cmr-hospitality-suite/
 CMR Hospitality Suite follows a modern cloud-native, multi-tenant architecture designed for scalability, security, and maintainability.
 
 ### High-Level Architecture (3D)
-
-> *(Replace with your architecture diagram once created.)*
 
 <p align="center">
   <img src="./docs/images/architecture-3d.png" width="900" alt="CMR Hospitality Suite 3D Architecture">
@@ -432,16 +432,6 @@ Additional implementation details are available in **SECURITY.md**.
 
 Our mission is to design and build secure, scalable, and intelligent software solutions that transform how businesses operate through automation, artificial intelligence, and digital infrastructure.
 
-**Focus Areas**
-
-- Hospitality Technology
-- Business Automation
-- Enterprise SaaS
-- Artificial Intelligence
-- Cloud Infrastructure
-- Security Systems
-- Digital Transformation
-
 ---
 
 # 📄 License
@@ -472,7 +462,7 @@ https://github.com/CMR-Labs
 ---
 
 <p align="center">
-<strong>Built with ❤️ by CMR Labs</strong><br>
+<strong>Built by CMR Labs</strong><br>
 Creating intelligent software for the future of hospitality.
 </p>
 
