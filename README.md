@@ -344,6 +344,7 @@ The screenshots below demonstrate the major modules available within CMR Hospita
 | AI Concierge | 🖼️ |
 | Admin Panel | 🖼️ |
 
+(assets/admin-panel-login.png)
 ---
 
 # 🚀 Installation
