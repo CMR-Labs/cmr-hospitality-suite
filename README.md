@@ -329,22 +329,19 @@ CMR Hospitality Suite follows a modern cloud-native, multi-tenant architecture d
 
 The screenshots below demonstrate the major modules available within CMR Hospitality Suite.
 
-> **Coming Soon**
-
-| Module | Preview |
-|---------|----------|
-| Landing Page | 🖼️ |
-| Dashboard | 🖼️ |
-| Reservations | 🖼️ |
-| Rooms | 🖼️ |
-| Guests | 🖼️ |
-| Payments | 🖼️ |
-| Analytics | 🖼️ |
-| CRM | 🖼️ |
-| AI Concierge | 🖼️ |
-| Admin Panel | 🖼️ |
-
 ![Admin Page](docs/assets/admin-panel-login.png)
+![admin panel](docs/assets/admin-panel.png)
+![home page](docs/assets/homepage(a).png)
+![home page](docs/assets/homepage(b).png)
+![home page](docs/assets/homepage(c).png)
+![home page](docs/assets/homepage(d).png)
+![home page](docs/assets/homepage(e).png)
+![home page](docs/assets/homepage(f).png)
+![home page](docs/assets/homepage(g).png)
+![reservation](docs/assets/hospitality-suite-create-new-reservation.png)
+![report](docs/assets/hospitality-suite-report-page.png)
+![login](docs/assets/login.png)
+
 ---
 
 # 🚀 Installation
