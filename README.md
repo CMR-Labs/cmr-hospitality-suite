@@ -22,7 +22,7 @@
 
 </p>
 
-## 🌟 Overview
+## Overview
 
 **CMR Hospitality Suite** is a modern, cloud-based Hospitality Management System (HMS) developed by **CMR Labs**, the software engineering division of **CMR Group**.
 
@@ -34,15 +34,15 @@ Designed with a multi-tenant architecture and enterprise-grade security, the pla
 
 ---
 
-## 🎯 Vision
+## Vision
 
 To become Africa's leading hospitality technology platform by empowering hospitality businesses with intelligent digital solutions that simplify operations, enhance guest experiences, and drive sustainable growth through innovation.
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🏨 Front Office Management
+### Front Office Management
 
 Manage every stage of the guest journey from booking to departure.
 
@@ -56,7 +56,7 @@ Manage every stage of the guest journey from booking to departure.
 
 ---
 
-### 🛎️ Hotel Operations
+### Hotel Operations
 
 Coordinate daily hotel activities from a unified operational dashboard.
 
@@ -70,7 +70,7 @@ Coordinate daily hotel activities from a unified operational dashboard.
 
 ---
 
-### 📊 Business Intelligence & Analytics
+### Business Intelligence & Analytics
 
 Monitor hotel performance with real-time insights and actionable metrics.
 
@@ -82,7 +82,7 @@ Monitor hotel performance with real-time insights and actionable metrics.
 
 ---
 
-### 🤝 Customer Relationship Management (CRM)
+### Customer Relationship Management (CRM)
 
 Build stronger guest relationships and improve customer retention.
 
@@ -93,7 +93,7 @@ Build stronger guest relationships and improve customer retention.
 
 ---
 
-### 🤖 AI Concierge
+### AI Concierge
 
 Enhance staff productivity with an intelligent AI-powered hotel assistant.
 
@@ -104,7 +104,7 @@ Enhance staff productivity with an intelligent AI-powered hotel assistant.
 
 ---
 
-### 🔒 Enterprise Security
+### Enterprise Security
 
 Built with security, compliance, and scalability at its core.
 
@@ -118,9 +118,8 @@ Built with security, compliance, and scalability at its core.
 - Secure Password Hashing (bcrypt)
 
 ---
----
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 CMR Hospitality Suite is built using a modern, scalable, and cloud-native technology stack designed for performance, security, and maintainability.
 
@@ -144,40 +143,40 @@ CMR Hospitality Suite is built using a modern, scalable, and cloud-native techno
 | **Version Control** | Git & GitHub | Source code management, collaboration, and continuous version tracking |
 ---
 
-## 🚀 System Modules
+## System Modules
 
 CMR Hospitality Suite is a comprehensive hospitality operations platform that combines modern 3D-inspired design, intelligent automation, and enterprise-grade management tools into a unified experience.
 
-### 🌐 Public Experience
+### Public Experience
 - 🏠 **Landing Website** – Modern marketing website with a premium 3D-inspired user interface
 - 🔐 **Authentication** – Secure login, registration, email verification, and password recovery
 
-### 🏨 Hotel Operations
+### Hotel Operations
 - 📊 **Dashboard** – Live operational KPIs, occupancy, revenue, and business insights
 - 🛏️ **Rooms** – Room inventory, availability, pricing, and photo management
 - 🏷️ **Room Types** – Configure room categories, amenities, and pricing structures
 - 📅 **Reservations** – Booking lifecycle, check-in, check-out, and reservation management
 - 👤 **Guests** – Guest profiles, stay history, preferences, and VIP management
 
-### 💼 Business Management
+### Business Management
 - 💳 **Payments** – Secure payment processing with Paystack integration
 - 👥 **Staff Management** – Employee records, departments, shifts, and role assignments
 - 🧹 **Housekeeping** – Task assignment, room status tracking, and maintenance coordination
 - 🎉 **Event Halls** – Hall management, bookings, scheduling, and event operations
 - 🤝 **CRM** – Customer relationship management, segmentation, and guest engagement
 
-### 📈 Intelligence & Automation
+### Intelligence & Automation
 - 📊 **Analytics** – Real-time occupancy, revenue, and operational analytics
 - 🤖 **AI Concierge** – AI-powered hotel assistant built with Anthropic Claude
 - 🔔 **Notifications** – System alerts, booking updates, and operational reminders
 - 📑 **Reports** – Exportable operational and financial reports
 
-### ⚙️ Administration & Security
+### Administration & Security
 - ⚙️ **Settings** – Hotel profile, branding, preferences, and system configuration
 - 📝 **Audit Logs** – Complete activity tracking and compliance logging
 - 🛡️ **Administration Panel** – Platform administration, user management, subscriptions, and system monitoring
 
-## 🏗️ Project Architecture
+## Project Architecture
 
 CMR Hospitality Suite follows a modern cloud-native, multi-tier architecture that separates the presentation layer, business logic, data layer, and external services for scalability, maintainability, and security.
 
@@ -325,7 +324,7 @@ CMR Hospitality Suite follows a modern cloud-native, multi-tenant architecture d
 
 ---
 
-# 📸 Product Preview
+# Product Preview
 
 The screenshots below demonstrate the major modules available within CMR Hospitality Suite.
 
@@ -373,7 +372,7 @@ Comprehensive project documentation is available inside the **docs/** directory.
 
 ---
 
-# 🗺️ Development Roadmap
+# Development Roadmap
 
 Current project progress:
 
@@ -392,7 +391,7 @@ Current project progress:
 | Audit Logs | ✅ |
 | Subscription System | ✅ |
 | Feature Gating | ✅ |
-| Mobile Optimization | 🚧 |
+| Mobile Optimization | ✅ |
 | Guest Booking Portal | 🚧 |
 | WhatsApp Integration | 🚧 |
 | SMS Integration | 🚧 |
@@ -401,7 +400,7 @@ For the complete roadmap, see **ROADMAP.md**.
 
 ---
 
-# 🔒 Security
+# Security
 
 Security is a core design principle of CMR Hospitality Suite.
 
@@ -422,7 +421,7 @@ Additional implementation details are available in **SECURITY.md**.
 
 ---
 
-# 👨‍💻 Developed By
+# Developed By
 
 ## CMR Labs
 
